@@ -65,12 +65,19 @@ namespace orchid {
 		std::cout << "Hello Orchid \n";
 	}
 
-	void tcp_listener::listen(size_t port) {
-		struct sockaddr_in addr;
+	void tcp_listener::set_addr(size_t port) {
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
 		addr.sin_addr.s_addr = ntohl(0); // define port
-		int bd = ::bind(tcp_listener::get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
+	}
+
+	struct sockaddr_in tcp_listener::get_addr() {
+		return addr;
+	}
+
+	void tcp_listener::listen(size_t port) {
+		tcp_listener::set_addr(port);
+		int bd = ::bind(tcp_listener::get_fd(), (const struct sockaddr*)&tcp_listener::get_addr(), sizeof(tcp_listener::get_addr()));
 		if(ISSOCKERR(bd)) {
 			tcp_listener::set_runner(-1);    
 			em::err_msg("Failed to bind socket fd...");
@@ -85,8 +92,8 @@ namespace orchid {
 	}
 
 	SOCKET tcp_listener::accept() {
-		socklen_t sock_len = sizeof(addr);
-		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), (struct sockaddr*)&addr, &sock_len);
+		socklen_t sock_len = sizeof(tcp_listener::get_addr());
+		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), (struct sockaddr*)&tcp_listener::get_addr(), &sock_len);
 		if(!ISVALIDSOCKET(conn_fd)) {
 			if(GETSOCKETERRNO() == EAGAIN || GETSOCKETERRNO() == EWOULDBLOCK) {
 				tcp_listener::set_runner(-1);
@@ -101,12 +108,19 @@ namespace orchid {
 		return conn_fd;
 	}
 
-	void tcp_streamer::connect(size_t port) {
-		struct sockaddr_in addr;
+	void tcp_streamer::set_addr(size_t port) {
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
-		addr.sin_addr.s_addr = ntohl(0);
-		int conn = ::connect(tcp_streamer::get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
+		addr.sin_addr.s_addr = ntohl(0); // define port
+	}
+
+	struct sockaddr_in tcp_streamer::get_addr() {
+		return addr;
+	}
+
+	void tcp_streamer::connect(size_t port) {
+		tcp_streamer::set_addr(port);
+		int conn = ::connect(tcp_streamer::get_fd(), (const struct sockaddr*)&tcp_streamer::get_addr(), sizeof(tcp_streamer::get_addr()));
 		if(ISSOCKERR(conn)) {
 			tcp_streamer::set_runner(-1);
 			em::err_msg("Failed connect to server ...");

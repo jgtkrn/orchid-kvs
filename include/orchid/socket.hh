@@ -22,15 +22,18 @@ namespace orchid {
 			SOCKET fd;
 			std::string buffer;
 			int runner = 0;
+			struct sockaddr_in addr;
 		public:
 			socket();
 			SOCKET get_fd();
 			void set_fd(SOCKET fd);
+			int get_runner();
+			void set_runner(int val);
+			struct sockaddr_in get_addr();
+			void set_addr();
 			std::string recv(SOCKET fd);
 			void send(SOCKET fd, std::string);
 			void close();
-			int get_runner();
-			void set_runner();
 			void sendata();
 	};
 
