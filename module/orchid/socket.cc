@@ -66,20 +66,12 @@ namespace orchid {
 		std::cout << "Hello Orchid \n";
 	}
 
-	void socket::set_addr(size_t port) {
+	void tcp_listener::listen(size_t port) {
+		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
 		addr.sin_addr.s_addr = ntohl(0); // define port
-	}
-
-	struct sockaddr_in socket::get_addr() {
-		return addr;
-	}
-
-	void tcp_listener::listen(size_t port) {
-		tcp_listener::set_addr(port);
-		socklen_t addr_len = sizeof(tcp_streamer::get_addr());
-		int bd = ::bind(tcp_listener::get_fd(), (const struct sockaddr*)&tcp_listener::get_addr(), &addr_len);
+		int bd = ::bind(tcp_listener::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(bd)) {
 			tcp_listener::set_runner(-1);    
 			em::err_msg("Failed to bind socket fd...");
@@ -94,8 +86,8 @@ namespace orchid {
 	}
 
 	SOCKET tcp_listener::accept() {
-		socklen_t addr_len = sizeof(tcp_streamer::get_addr());
-		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), (const struct sockaddr*)&tcp_listener::get_addr(), &addr_len);
+		struct sockaddr_in addr;
+		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(!ISVALIDSOCKET(conn_fd)) {
 			if(GETSOCKETERRNO() == EAGAIN || GETSOCKETERRNO() == EWOULDBLOCK) {
 				tcp_listener::set_runner(-1);
@@ -111,9 +103,12 @@ namespace orchid {
 	}
 
 	void tcp_streamer::connect(size_t port) {
-		tcp_streamer::set_addr(port);
+		struct sockaddr_in addr;
+		addr.sin_family = AF_INET;
+		addr.sin_port = ntohs(port);
+		addr.sin_addr.s_addr = ntohl(0); // define port
 		socklen_t addr_len = sizeof(tcp_streamer::get_addr());
-		int conn = ::connect(tcp_streamer::get_fd(), (const struct sockaddr*)&tcp_streamer::get_addr(), &addr_len);
+		int conn = ::connect(tcp_streamer::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			tcp_streamer::set_runner(-1);
 			em::err_msg("Failed connect to server ...");

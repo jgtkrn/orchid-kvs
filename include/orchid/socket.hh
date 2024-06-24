@@ -4,6 +4,7 @@
 
 #include<iostream>
 #include<string>
+#include<cstring>
 #include<sys/socket.h>
 #include<errno.h>
 #include<unistd.h>
@@ -22,15 +23,12 @@ namespace orchid {
 			SOCKET fd;
 			std::string buffer;
 			int runner = 0;
-			struct sockaddr_in addr;
 		public:
 			socket();
 			SOCKET get_fd();
 			void set_fd(SOCKET fd);
 			int get_runner();
 			void set_runner(int val);
-			struct sockaddr_in get_addr();
-			void set_addr(size_t port);
 			std::string recv(SOCKET fd);
 			void send(SOCKET fd, std::string);
 			void close();
