@@ -77,13 +77,13 @@ namespace orchid {
 
 	void tcp_listener::listen(size_t port) {
 		tcp_listener::set_addr(port);
-		int bd = ::bind(fd, (const struct sockaddr*)addr, sizeof(addr));
+		int bd = ::bind(tcp_listener::get_fd(), (const struct sockaddr*)addr, sizeof(addr));
 		if(ISSOCKERR(bd)) {
 			tcp_listener::set_runner(-1);    
 			em::err_msg("Failed to bind socket fd...");
 		}
 
-		int lis = ::listen(fd, SOMAXCONN);
+		int lis = ::listen(tcp_listener::get_fd(), SOMAXCONN);
 		if(ISSOCKERR(lis)) {
 			tcp_listener::set_runner(-1);
 			em::err_msg("Failed listen to socket...");
@@ -93,7 +93,7 @@ namespace orchid {
 
 	SOCKET tcp_listener::accept() {
 		socklen_t sock_len = sizeof(addr);
-		SOCKET conn_fd = ::accept(fd, (struct sockaddr*)&addr, &sock_len);
+		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), (struct sockaddr*)&addr, &sock_len);
 		if(!ISVALIDSOCKET(conn_fd)) {
 			if(GETSOCKETERRNO() == EAGAIN || GETSOCKETERRNO() == EWOULDBLOCK) {
 				tcp_listener::set_runner(-1);
@@ -110,7 +110,7 @@ namespace orchid {
 
 	void tcp_streamer::connect(size_t port) {
 		tcp_streamer::set_addr(port);
-		int conn = ::connect(fd, (const struct sockaddr*)&addr, sizeof(addr));
+		int conn = ::connect(tcp_streamer::get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			tcp_streamer::set_runner(-1);
 			em::err_msg("Failed connect to server ...");
