@@ -30,7 +30,7 @@ namespace orchid {
 			int get_runner();
 			void set_runner(int val);
 			struct sockaddr_in get_addr();
-			void set_addr();
+			void set_addr(size_t port);
 			std::string recv(SOCKET fd);
 			void send(SOCKET fd, std::string);
 			void close();
