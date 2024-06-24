@@ -2,13 +2,6 @@
 #define ORCHID_SOCKET
 #endif
 
-#define SOCKET int
-
-#define ISVALIDSOCKET(s) ((s) >= 0)
-#define CLOSESOCKET(s) close(s)
-#define GETSOCKETERRNO() (errno)
-#define ISSOCKERR(s) ((s) != 0)
-
 #include<iostream>
 #include<string>
 #include<sys/socket.h>
@@ -17,13 +10,19 @@
 #include<arpa/inet.h>
 #include<fcntl.h>
 
+#define SOCKET int
+
+#define ISVALIDSOCKET(s) ((s) >= 0)
+#define GETSOCKETERRNO() (errno)
+#define ISSOCKERR(s) ((s) != 0)
+
 namespace orchid {
 	class socket {
 		private:
 			SOCKET fd;
-			int runner = 0;
 			std::string buffer;
 		public:
+			int runner = 0;
 			socket();
 			SOCKET get_fd();
 			std::string recv(SOCKET fd);
