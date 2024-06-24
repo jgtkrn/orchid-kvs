@@ -3,21 +3,21 @@
 
 namespace orchid {
 	socket::socket(){
-		new_fd = ::socket(AF_INET, SOCK_STREAM, 0);
+		SOCKET new_fd = ::socket(AF_INET, SOCK_STREAM, 0);
 		if(!ISVALIDSOCKET(new_fd)) {
-			set_runner(-1);
+			socket::set_runner(-1);
 			em::err_msg("Failed to init socket fd...");
 		}
 
 		SOCKET setsock = manage_sock_option(new_fd);
 		if(ISSOCKERR(setsock)) {
-			set_runner(-1);
+			socket::set_runner(-1);
 			em::err_msg("Failed to set socket options...");
 		}
 		socket::set_fd(new_fd);
 	}
 
-	void set_fd(SOCKET new_fd) {
+	void socket::set_fd(SOCKET new_fd) {
 		fd = new_fd;
 	}
 
@@ -66,18 +66,19 @@ namespace orchid {
 	}
 
 	void tcp_listener::listen(size_t port) {
+		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
 		addr.sin_addr.s_addr = ntohl(0); // define port
-		int bd = ::bind(get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
+		int bd = ::bind(tcp_listener::get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
 		if(ISSOCKERR(bd)) {
-			set_runner(-1);    
+			tcp_listener::set_runner(-1);    
 			em::err_msg("Failed to bind socket fd...");
 		}
 
-		int lis = ::listen(get_fd(), SOMAXCONN);
+		int lis = ::listen(tcp_listener::get_fd(), SOMAXCONN);
 		if(ISSOCKERR(lis)) {
-			set_runner(-1);
+			tcp_listener::set_runner(-1);
 			em::err_msg("Failed listen to socket...");
 		}
 
@@ -85,14 +86,14 @@ namespace orchid {
 
 	SOCKET tcp_listener::accept() {
 		socklen_t sock_len = sizeof(addr);
-		SOCKET conn_fd = ::accept(get_fd(), (struct sockaddr*)&addr, &sock_len);
+		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), (struct sockaddr*)&addr, &sock_len);
 		if(!ISVALIDSOCKET(conn_fd)) {
 			if(GETSOCKETERRNO() == EAGAIN || GETSOCKETERRNO() == EWOULDBLOCK) {
-				set_runner(-1);
+				tcp_listener::set_runner(-1);
 				em::err_msg("Failed connection blocked...");
 				return conn_fd;
 			} else {
-				set_runner(-1);
+				tcp_listener::set_runner(-1);
 				em::err_msg("Failed accepting connection...");
 				return conn_fd;
 			}
@@ -105,9 +106,9 @@ namespace orchid {
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
 		addr.sin_addr.s_addr = ntohl(0);
-		int conn = ::connect(get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
+		int conn = ::connect(tcp_streamer::get_fd(), (const struct sockaddr*)&addr, sizeof(addr));
 		if(ISSOCKERR(conn)) {
-			set_runner(-1);
+			tcp_streamer::set_runner(-1);
 			em::err_msg("Failed connect to server ...");
 		}
 	}

@@ -35,8 +35,6 @@ namespace orchid {
 	};
 
 	class tcp_listener: public socket {
-		private:
-			struct sockaddr_in addr;
 		public:
 			void listen(size_t port);
 			SOCKET accept();
