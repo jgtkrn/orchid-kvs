@@ -55,7 +55,7 @@ namespace orchid {
 	}
 
 	void socket::send(SOCKET target_fd, std::string message) {
-		char temp_msg[message.size()] = message;
+		char *temp_msg = message;
 		int buff_len = ::send(target_fd, temp_msg, message.size(), 0);
 		if(buff_len == -1) em::err_msg("Failed send data...");
 		if(buff_len == 0) em::err_msg("No data was sent...");
@@ -65,13 +65,13 @@ namespace orchid {
 		std::cout << "Hello Orchid \n";
 	}
 
-	void tcp_listener::set_addr(size_t port) {
+	void socket::set_addr(size_t port) {
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
 		addr.sin_addr.s_addr = ntohl(0); // define port
 	}
 
-	struct sockaddr_in tcp_listener::get_addr() {
+	struct sockaddr_in socket::get_addr() {
 		return addr;
 	}
 
@@ -106,16 +106,6 @@ namespace orchid {
 			}
 		}
 		return conn_fd;
-	}
-
-	void tcp_streamer::set_addr(size_t port) {
-		addr.sin_family = AF_INET;
-		addr.sin_port = ntohs(port);
-		addr.sin_addr.s_addr = ntohl(0); // define port
-	}
-
-	struct sockaddr_in tcp_streamer::get_addr() {
-		return addr;
 	}
 
 	void tcp_streamer::connect(size_t port) {
