@@ -21,14 +21,16 @@ namespace orchid {
 		private:
 			SOCKET fd;
 			std::string buffer;
-		public:
 			int runner = 0;
+		public:
 			socket();
 			SOCKET get_fd();
+			void set_fd(SOCKET fd);
 			std::string recv(SOCKET fd);
 			void send(SOCKET fd, std::string);
 			void close();
-			int check_runner();
+			int get_runner();
+			void set_runner();
 			void sendata();
 	};
 
