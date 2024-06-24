@@ -87,7 +87,8 @@ namespace orchid {
 
 	SOCKET tcp_listener::accept() {
 		struct sockaddr_in addr;
-		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
+		socklen_t addr_len = sizeof(addr);
+		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), &addr_len);
 		if(!ISVALIDSOCKET(conn_fd)) {
 			if(GETSOCKETERRNO() == EAGAIN || GETSOCKETERRNO() == EWOULDBLOCK) {
 				tcp_listener::set_runner(-1);
@@ -107,7 +108,6 @@ namespace orchid {
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
 		addr.sin_addr.s_addr = ntohl(0); // define port
-		socklen_t addr_len = sizeof(tcp_streamer::get_addr());
 		int conn = ::connect(tcp_streamer::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			tcp_streamer::set_runner(-1);
