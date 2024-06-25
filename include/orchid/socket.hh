@@ -3,6 +3,7 @@
 #endif
 
 #include<iostream>
+#include<sstream>
 #include<string>
 #include<cstring>
 #include<sys/socket.h>

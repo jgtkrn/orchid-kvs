@@ -82,8 +82,9 @@ namespace orchid {
 			tcp_listener::set_runner(-1);
 			em::err_msg("Failed listen to socket...");
 		}
-		std::string success_listen = "Server listening to port: ";
-		success_listen.append(port);
+		std::stringstream stream_msg;
+		stream_msg << "Server listening to port: " << port;
+		std::string success_listen = stream_msg.str();
 		em::norm_msg(success_listen);
 	}
 

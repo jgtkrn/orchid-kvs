@@ -5,4 +5,5 @@
 
 namespace em {
     void err_msg(std::string msg);
+    void norm_msg(std::string msg);
 }
