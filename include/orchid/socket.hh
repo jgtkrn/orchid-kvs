@@ -50,4 +50,4 @@ namespace orchid {
 			void connect(size_t port);
 	};
 } // namespace orchid
-#endif // ORCHID_SOCKET
+#endif // ORCHID_SOCKET_H
