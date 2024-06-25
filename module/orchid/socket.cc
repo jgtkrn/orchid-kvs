@@ -9,7 +9,8 @@ namespace orchid {
 			em::err_msg("Failed to init socket fd...");
 		}
 
-		SOCKET setsock = manage_sock_option(new_fd);
+		int sock_val = 1;
+		SOCKET setsock = ::setsockopt(new_fd, SOL_SOCKET, SO_REUSEADDR, &sock_val, sizeof(sock_val));
 		if(ISSOCKERR(setsock)) {
 			socket::set_runner(-1);
 			em::err_msg("Failed to set socket options...");
@@ -81,7 +82,9 @@ namespace orchid {
 			tcp_listener::set_runner(-1);
 			em::err_msg("Failed listen to socket...");
 		}
-
+		std::string success_listen = "Server listening to port: ";
+		success_listen.append(port);
+		em::norm_msg(success_listen);
 	}
 
 	SOCKET tcp_listener::accept() {
@@ -110,20 +113,13 @@ namespace orchid {
 		int conn = ::connect(tcp_streamer::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			tcp_streamer::set_runner(-1);
-			em::err_msg("Failed connect to server ...");
+			em::err_msg("Failed connect to server...");
 		}
 	}
 
-	int check_closed_connection(SOCKET target_fd) {
+	int socket::check_closed_connection(SOCKET target_fd) {
 		char message[1];
 		int buff_len = ::recv(target_fd, message, 1, MSG_PEEK | MSG_DONTWAIT);
 		return buff_len;
 	}
-
-	SOCKET manage_sock_option(SOCKET new_fd) {
-		int sock_val = 1;
-		SOCKET setsock = ::setsockopt(new_fd, SOL_SOCKET, SO_REUSEADDR, &sock_val, sizeof(sock_val));
-		return setsock;
-	}
-
 }

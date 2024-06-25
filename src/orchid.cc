@@ -3,7 +3,7 @@
 #include<orchid/socket.hh>
 
 int main(){
-	orchid::socket sock;
-	sock.sendata();
+	orchid::tcp_listener sock;
+	sock.listen(1234);
 	return 0;
 }

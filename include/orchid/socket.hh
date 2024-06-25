@@ -33,6 +33,7 @@ namespace orchid {
 			void send(SOCKET fd, std::string);
 			void close();
 			void sendata();
+			int check_closed_connection(SOCKET fd);
 	};
 
 	class tcp_listener: public socket {
@@ -45,7 +46,4 @@ namespace orchid {
 		public:
 			void connect(size_t port);
 	};
-
-	SOCKET manage_sock_option(SOCKET fd);
-	int check_closed_connection(SOCKET fd);
 } // namespace orchid

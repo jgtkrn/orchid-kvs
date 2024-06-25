@@ -4,4 +4,8 @@ namespace em {
         // append log file
         std::cout << msg << std::endl;
     }
+
+    void norm_msg(std::string msg) {
+        std::cout << msg << std::endl;
+    }
 }
