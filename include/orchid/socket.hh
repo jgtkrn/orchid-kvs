@@ -1,5 +1,5 @@
-#ifndef ORCHID_SOCKET
-#define ORCHID_SOCKET
+#ifndef __ORCHID_SOCKET__
+#define __ORCHID_SOCKET__
 #endif
 
 #include<iostream>
@@ -9,6 +9,7 @@
 #include<sys/socket.h>
 #include<errno.h>
 #include<unistd.h>
+#include<netinet/in.h>
 #include<arpa/inet.h>
 #include<fcntl.h>
 
