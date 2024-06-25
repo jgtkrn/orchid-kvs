@@ -1,10 +1,13 @@
 CC=g++
 FLAGS= -Wall -Wextra -I./include
 
-all: clean module/orchid/socket.o module/em/em.o src/orchid
+all: clean module/orchid/socket.o module/em/em.o src/orchid src/orchid-cli
 
 src/orchid: module/orchid/socket.o
 	$(CC) src/orchid.cc module/orchid/socket.o module/em/em.o -o src/orchid $(FLAGS)
+
+src/orchid-cli: module/orchid/socket.o
+	$(CC) src/orchid-cli.cc module/orchid/socket.o module/em/em.o -o src/orchid-cli $(FLAGS)
 
 module/orchid/socket.o:
 	$(CC) -c module/orchid/socket.cc -o module/orchid/socket.o $(FLAGS)

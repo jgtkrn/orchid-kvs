@@ -18,6 +18,8 @@
 #define GETSOCKETERRNO() (errno)
 #define ISSOCKERR(s) ((s) != 0)
 
+#define READ_LEN 4096
+
 namespace orchid {
 	class socket {
 		private:
@@ -30,7 +32,7 @@ namespace orchid {
 			void set_fd(SOCKET fd);
 			int get_runner();
 			void set_runner(int val);
-			std::string recv(SOCKET fd);
+			int recv(SOCKET fd, char *message, size_t len);
 			void send(SOCKET fd, std::string);
 			void close();
 			void sendata();

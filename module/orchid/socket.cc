@@ -38,21 +38,10 @@ namespace orchid {
 		::close(get_fd());
 	}
 
-	std::string socket::recv(SOCKET target_fd) {
-		char temp_buffer[4096]; // TODO: config default buffer
-		int bytes_len;
-		while (1) {
-			bytes_len = ::recv(target_fd, temp_buffer, sizeof(temp_buffer), 0);
-			if (bytes_len < 0) {
-				em::err_msg("Failed receive data...");
-				break;
-			} else if (bytes_len == 0) {
-				em::err_msg("No data received...");
-				break;
-			}
-			buffer.append(temp_buffer, bytes_len);
-		}
-		return buffer;
+	int socket::recv(SOCKET target_fd, char *message, size_t len) {
+		int buff_len = ::recv(target_fd, message, len, 0);
+    		if(buff_len > 0) message[buff_len] = 0;
+    		return buff_len;
 	}
 
 	void socket::send(SOCKET target_fd, std::string message) {
@@ -62,10 +51,6 @@ namespace orchid {
 		if(buff_len == 0) em::err_msg("No data was sent...");
 	}
 
-	void socket::sendata(){
-		std::cout << "Hello Orchid \n";
-	}
-
 	void tcp_listener::listen(size_t port) {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
@@ -73,7 +58,7 @@ namespace orchid {
 		addr.sin_addr.s_addr = ntohl(0); // define port
 		int bd = ::bind(tcp_listener::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(bd)) {
-			tcp_listener::set_runner(-1);    
+			tcp_listener::set_runner(-1);
 			em::err_msg("Failed to bind socket fd...");
 		}
 
@@ -81,6 +66,16 @@ namespace orchid {
 		if(ISSOCKERR(lis)) {
 			tcp_listener::set_runner(-1);
 			em::err_msg("Failed listen to socket...");
+		}
+    		int flags = fcntl(tcp_listener::get_fd(), F_GETFL, 0);
+		if(-1 == flags) {
+			tcp_listener::set_runner(-1);
+        		em::err_msg("Failed to get flag status...");
+    		}
+
+		if(-1 == fcntl(tcp_listener::get_fd(), F_SETFL, flags | O_NONBLOCK)) {
+			tcp_listener::set_runner(-1);
+			em::err_msg("Failed to set flag status...");
 		}
 		std::stringstream stream_msg;
 		stream_msg << "Server listening to port: " << port;
@@ -94,12 +89,8 @@ namespace orchid {
 		SOCKET conn_fd = ::accept(tcp_listener::get_fd(), reinterpret_cast<struct sockaddr*>(&addr), &addr_len);
 		if(!ISVALIDSOCKET(conn_fd)) {
 			if(GETSOCKETERRNO() == EAGAIN || GETSOCKETERRNO() == EWOULDBLOCK) {
-				tcp_listener::set_runner(-1);
-				em::err_msg("Failed connection blocked...");
 				return conn_fd;
 			} else {
-				tcp_listener::set_runner(-1);
-				em::err_msg("Failed accepting connection...");
 				return conn_fd;
 			}
 		}
@@ -115,6 +106,11 @@ namespace orchid {
 		if(ISSOCKERR(conn)) {
 			tcp_streamer::set_runner(-1);
 			em::err_msg("Failed connect to server...");
+		} else {
+			std::stringstream stream_msg;
+			stream_msg << "Client connected to port: " << port;
+			std::string report = stream_msg.str();
+			std::cout << report << std::endl;
 		}
 	}
 
