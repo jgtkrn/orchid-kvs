@@ -1,7 +1,3 @@
-#ifndef __ORCHID_SOCKET__
-#define __ORCHID_SOCKET__
-#endif
-
 #include<iostream>
 #include<sstream>
 #include<string>
@@ -20,6 +16,9 @@
 #define ISSOCKERR(s) ((s) != 0)
 
 #define READ_LEN 4096
+
+#ifndef ORCHID_SOCKET_H
+#define ORCHID_SOCKET_H
 
 namespace orchid {
 	class socket {
@@ -51,3 +50,4 @@ namespace orchid {
 			void connect(size_t port);
 	};
 } // namespace orchid
+#endif // ORCHID_SOCKET
