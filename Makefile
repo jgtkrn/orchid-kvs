@@ -10,7 +10,7 @@ module/orchid/socket.o:
 	$(CC) -c module/orchid/socket.cc -o module/orchid/socket.o $(FLAGS)
 
 module/em/em.o:
-	$(CC) -c module/orchid/em.cc -o module/orchid/em.o $(FLAGS)
+	$(CC) -c module/em/em.cc -o module/em/em.o $(FLAGS)
 
 clean:
 	rm -rf **/**/*.o **/*.o *.o src/orchid src/orchid-cli

@@ -55,8 +55,7 @@ namespace orchid {
 	}
 
 	void socket::send(SOCKET target_fd, std::string message) {
-		char *temp_msg = "";
-		strcpy(temp_msg, message.c_str());
+		char *temp_msg = message.data();
 		int buff_len = ::send(target_fd, temp_msg, message.size(), 0);
 		if(buff_len == -1) em::err_msg("Failed send data...");
 		if(buff_len == 0) em::err_msg("No data was sent...");

@@ -1,4 +1,4 @@
-#include<em/em.h>
+#include<em/em.hh>
 namespace em {
     void err_msg(std::string msg) {
         // append log file
