@@ -16,3 +16,8 @@ TEST(SocketInitiation, TCPStreamer) {
 	EXPECT_GT(sock.get_fd(), 2);
 }
 
+int main() {
+	::testing::InitGoogleTest();
+	return RUN_ALL_TESTS();
+}
+
