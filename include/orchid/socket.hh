@@ -34,7 +34,7 @@ namespace orchid {
 			int get_runner();
 			void set_runner(int val);
 			int recv(SOCKET target_fd, char *message, int len);
-			void send(SOCKET target_fd, std::string& message);
+			int send(SOCKET target_fd, std::string& message);
 			void close();
 			int check_closed_connection(SOCKET target_fd);
 	};

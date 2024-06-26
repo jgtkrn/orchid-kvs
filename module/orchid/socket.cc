@@ -47,7 +47,7 @@ namespace orchid {
     		return buff_len;
 	}
 
-	void socket::send(SOCKET target_fd, std::string& message) {
+	int socket::send(SOCKET target_fd, std::string& message) {
 		char *temp_msg = message.data();
 		int buff_len = ::send(target_fd, temp_msg, message.size() + 1, 0);
 		if(buff_len == -1) std::cout << "Failed send data..." << std::endl;
