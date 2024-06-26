@@ -9,7 +9,7 @@
 #include<arpa/inet.h>
 #include<fcntl.h>
 
-typedef int SOCKET
+typedef int SOCKET;
 
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define GETSOCKETERRNO() (errno)
@@ -28,13 +28,13 @@ namespace orchid {
 			int runner = 0;
 		public:
 			socket();
-			virtual ~socket(){close();}
+			void init();
 			SOCKET get_fd();
 			void set_fd(SOCKET new_fd);
 			int get_runner();
 			void set_runner(int val);
-			virtual recv(SOCKET target_fd, char *message, size_t len);
-			virtual send(SOCKET target_fd, std::string& message);
+			int recv(SOCKET target_fd, char *message, int len);
+			void send(SOCKET target_fd, std::string& message);
 			void close();
 			int check_closed_connection(SOCKET target_fd);
 	};
