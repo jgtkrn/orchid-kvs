@@ -1,18 +1,18 @@
 #include<gtest/gtest.h>
 #include<orchid/socket.hh>
 
-struct SocketTest: public testing:TEST {
+struct SocketTest: public testing::Test {
 	orchid::socket *sock;
 	void SetUp() { sock = new orchid::socket(); }
-	void TearDown() { 
+	void TearDown() {
 		sock->close();
-		delete sock; 
+		delete sock;
 	}
-}
+};
 
-TEST_F(SocketTest, SocketInit) {
+TEST_F(SocketTest, SocketInitOpen) {
 	sock->init();
-	EXPECT_GT(sock.get_fd(), 2);
+	EXPECT_GT(sock->get_fd(), 2);
 }
 
 TEST(SocketInit, SocketClosed) {
@@ -50,4 +50,3 @@ TEST(SocketInit, TCPStreamerClosed) {
 	EXPECT_EQ(sock.get_fd(), -1);
 }
 
-TEST()
