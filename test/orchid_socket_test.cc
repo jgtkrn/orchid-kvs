@@ -1,6 +1,8 @@
 #include<gtest/gtest.h>
 #include<orchid/socket.hh>
 
+size_t test_port = 5432;
+
 struct SocketTest: public testing::Test {
 	orchid::socket *sock;
 	void SetUp() { sock = new orchid::socket(); }
@@ -41,7 +43,7 @@ TEST_F(SocketTest, SocketClose) {
 
 TEST_F(SocketTest, SocketSetFd) {
 	sock->set_fd(5);
-	EXPECT_GT(sock->get_fd(), 5);
+	EXPECT_EQ(sock->get_fd(), 5);
 }
 
 TEST_F(SocketTest, SocketGetFd) {
@@ -50,7 +52,7 @@ TEST_F(SocketTest, SocketGetFd) {
 
 TEST_F(SocketTest, SocketSetRunner) {
 	sock->set_runner(5);
-	EXPECT_GT(sock->get_runner(), 5);
+	EXPECT_EQ(sock->get_runner(), 5);
 }
 
 TEST_F(SocketTest, SocketGetRunner) {
@@ -64,7 +66,8 @@ TEST_F(SocketTest, SocketRecv) {
 }
 
 TEST_F(SocketTest, SocketSend) {
-	EXPECT_TRUE(sock->send(5, "test") >= -1);
+	std::string msg = "test";
+	EXPECT_TRUE(sock->send(5, msg) >= -1);
 }
 
 TEST_F(TCPListenerTest, TCPListenerInit) {
@@ -80,7 +83,7 @@ TEST_F(TCPListenerTest, TCPListenerClose) {
 
 TEST_F(TCPListenerTest, TCPListenerSetFd) {
 	sock->set_fd(5);
-	EXPECT_GT(sock->get_fd(), 5);
+	EXPECT_EQ(sock->get_fd(), 5);
 }
 
 TEST_F(TCPListenerTest, TCPListenerGetFd) {
@@ -89,7 +92,7 @@ TEST_F(TCPListenerTest, TCPListenerGetFd) {
 
 TEST_F(TCPListenerTest, TCPListenerSetRunner) {
 	sock->set_runner(5);
-	EXPECT_GT(sock->get_runner(), 5);
+	EXPECT_EQ(sock->get_runner(), 5);
 }
 
 TEST_F(TCPListenerTest, TCPListenerGetRunner) {
@@ -103,7 +106,25 @@ TEST_F(TCPListenerTest, TCPListenerRecv) {
 }
 
 TEST_F(TCPListenerTest, TCPListenerSend) {
-	EXPECT_TRUE(sock->send(5, "test") >= -1);
+	std::string msg = "test";
+	EXPECT_TRUE(sock->send(5, msg) >= -1);
+}
+
+TEST_F(TCPListenerTest, TCPListenerListenSuccess) {
+	sock->init();
+	sock->listen(test_port);
+	EXPECT_TRUE(sock->get_runner() == 0);
+}
+
+TEST_F(TCPListenerTest, TCPListenerListenFailed) {
+	sock->listen(test_port);
+	EXPECT_TRUE(sock->get_runner() == -1);
+}
+
+TEST_F(TCPListenerTest, TCPListenerAccept) {
+	sock->init();
+	sock->listen(test_port);
+	EXPECT_TRUE(sock->accept() >= -1);
 }
 
 TEST_F(TCPStreamerTest, TCPStreamerInit) {
@@ -119,7 +140,7 @@ TEST_F(TCPStreamerTest, TCPStreamerClose) {
 
 TEST_F(TCPStreamerTest, TCPStreamerSetFd) {
 	sock->set_fd(5);
-	EXPECT_GT(sock->get_fd(), 5);
+	EXPECT_EQ(sock->get_fd(), 5);
 }
 
 TEST_F(TCPStreamerTest, TCPStreamerGetFd) {
@@ -128,7 +149,7 @@ TEST_F(TCPStreamerTest, TCPStreamerGetFd) {
 
 TEST_F(TCPStreamerTest, TCPStreamerSetRunner) {
 	sock->set_runner(5);
-	EXPECT_GT(sock->get_runner(), 5);
+	EXPECT_EQ(sock->get_runner(), 5);
 }
 
 TEST_F(TCPStreamerTest, TCPStreamerGetRunner) {
@@ -142,5 +163,12 @@ TEST_F(TCPStreamerTest, TCPStreamerRecv) {
 }
 
 TEST_F(TCPStreamerTest, TCPStreamerSend) {
-	EXPECT_TRUE(sock->send(5, "test") >= -1);
+	std::string msg = "test";
+	EXPECT_TRUE(sock->send(5, msg) >= -1);
+}
+
+TEST_F(TCPStreamerTest, TCPListenerConnect) {
+	sock->init();
+	sock->connect(test_port);
+	EXPECT_TRUE(sock->get_runner() >= -1);
 }

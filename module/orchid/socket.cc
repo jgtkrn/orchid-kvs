@@ -52,6 +52,7 @@ namespace orchid {
 		int buff_len = ::send(target_fd, temp_msg, message.size() + 1, 0);
 		if(buff_len == -1) std::cout << "Failed send data..." << std::endl;
 		if(buff_len == 0) std::cout << "No data was sent..." << std::endl;
+		return buff_len;
 	}
 
 	void tcp_listener::listen(size_t port) {
@@ -71,7 +72,7 @@ namespace orchid {
 			std::cout << "Failed listen to socket..." << std::endl;
 		}
 
-    	int flags = ::fcntl(get_fd(), F_GETFL, 0);
+    		int flags = ::fcntl(get_fd(), F_GETFL, 0);
 		if(-1 == flags) {
 			set_runner(-1);
         		std::cout << "Failed to get flag status..." << std::endl;
