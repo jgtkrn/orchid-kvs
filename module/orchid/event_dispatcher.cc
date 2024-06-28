@@ -38,22 +38,22 @@ namespace orchid {
             if(-1 == nfds) {
                 std::cout << "No events to watch " << std::endl;
             }
-            return nfds; 
+            return nfds;
         }
-        
-        EFD get_fd() {
+
+        EFD event_dispatcher::get_fd() {
             return fd;
         }
-        void set_fd(EFD new_fd) {
+        void event_dispatcher::set_fd(EFD new_fd) {
             fd = new_fd;
         }
-        short get_runner() {
+        short event_dispatcher::get_runner() {
             return runner;
         }
-        void set_runner(short val) {
+        void event_dispatcher::set_runner(short val) {
             runner = val;
         }
-        void close() {
-            close(get_fd());
+        void event_dispatcher::close() {
+            ::close(get_fd());
         }
 }

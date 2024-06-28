@@ -116,7 +116,7 @@ namespace orchid {
         		std::cout << "Failed to get flag status..." << std::endl;
     		}
 
-			if(-1 == ::fcntl(get_fd(), F_SETFL, flags | O_NONBLOCK)) {
+			if(-1 == ::fcntl(target_fd, F_SETFL, flags | O_NONBLOCK)) {
 				return -1;
 				std::cout << "Failed to set flag status..." << std::endl;
 			}
