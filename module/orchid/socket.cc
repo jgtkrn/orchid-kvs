@@ -26,11 +26,11 @@ namespace orchid {
 		return fd;
 	}
 
-	int socket::get_runner() {
+	short socket::get_runner() {
 		return runner;
 	}
 
-	void socket::set_runner(int val) {
+	void socket::set_runner(short val) {
 		runner = val;
 	}
 
@@ -41,10 +41,11 @@ namespace orchid {
 		}
 	}
 
-	int socket::recv(SOCKET target_fd, char *message, int len) {
+	// TODO: CONVERT TO STD::STRING
+	int socket::recv(SOCKET target_fd, char *message, unsigned short len) {
 		int buff_len = ::recv(target_fd, message, len, 0);
-    		if(buff_len > 0) message[buff_len] = 0;
-    		return buff_len;
+    	if(buff_len > 0) message[buff_len] = 0;
+    	return buff_len;
 	}
 
 	int socket::send(SOCKET target_fd, std::string& message) {
@@ -55,7 +56,7 @@ namespace orchid {
 		return buff_len;
 	}
 
-	void tcp_listener::listen(size_t port) {
+	void tcp_listener::listen(unsigned short port) {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
@@ -71,21 +72,10 @@ namespace orchid {
 			set_runner(-1);
 			std::cout << "Failed listen to socket..." << std::endl;
 		}
-
-    		int flags = ::fcntl(get_fd(), F_GETFL, 0);
-		if(-1 == flags) {
-			set_runner(-1);
-        		std::cout << "Failed to get flag status..." << std::endl;
-    		}
-
-		if(-1 == ::fcntl(get_fd(), F_SETFL, flags | O_NONBLOCK)) {
-			set_runner(-1);
-			std::cout << "Failed to set flag status..." << std::endl;
-		}
+		
 		std::stringstream stream_msg;
 		stream_msg << "Server listening to port: " << port;
-		std::string success_listen = stream_msg.str();
-		std::cout << success_listen << std::endl;
+		std::cout << stream_msg.str() << std::endl;
 	}
 
 	SOCKET tcp_listener::accept() {
@@ -102,7 +92,7 @@ namespace orchid {
 		return conn_fd;
 	}
 
-	void tcp_streamer::connect(size_t port) {
+	void tcp_streamer::connect(unsigned short port) {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
@@ -118,9 +108,24 @@ namespace orchid {
 		}
 	}
 
-	int socket::check_closed_connection(SOCKET target_fd) {
-		char message[1];
-		int buff_len = ::recv(target_fd, message, 1, MSG_PEEK | MSG_DONTWAIT);
-		return buff_len;
-	}
+	namespace utils {
+		short set_socket_to_non_block(SOCKET target_fd) {
+			int flags = ::fcntl(target_fd, F_GETFL, 0);
+			if(-1 == flags) {
+				return -1;
+        		std::cout << "Failed to get flag status..." << std::endl;
+    		}
+
+			if(-1 == ::fcntl(get_fd(), F_SETFL, flags | O_NONBLOCK)) {
+				return -1;
+				std::cout << "Failed to set flag status..." << std::endl;
+			}
+			return 0;
+		}
+		short check_closed_connection(SOCKET target_fd) {
+			char message[1];
+			short buff_len = ::recv(target_fd, message, 1, MSG_PEEK | MSG_DONTWAIT);
+			return buff_len;
+		}
+	} // namespace utils
 }

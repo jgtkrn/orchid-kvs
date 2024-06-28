@@ -17,37 +17,40 @@ typedef int SOCKET;
 
 #define READ_LEN 4096
 
-#ifndef ORCHID_SOCKET_H
-#define ORCHID_SOCKET_H
+#ifndef ORCHID_SOCKET
+#define ORCHID_SOCKET
 
 namespace orchid {
 	class socket {
 		private:
 			SOCKET fd;
-			std::string buffer;
-			int runner = 0;
+			short runner = 0;
 		public:
 			socket();
 			void init();
 			SOCKET get_fd();
 			void set_fd(SOCKET new_fd);
-			int get_runner();
-			void set_runner(int val);
-			int recv(SOCKET target_fd, char *message, int len);
+			short get_runner();
+			void set_runner(short val);
+			int recv(SOCKET target_fd, char *message, unsigned short len);
 			int send(SOCKET target_fd, std::string& message);
 			void close();
-			int check_closed_connection(SOCKET target_fd);
 	};
 
 	class tcp_listener: public socket {
 		public:
-			void listen(size_t port);
+			void listen(unsigned short port);
 			SOCKET accept();
 	};
 
 	class tcp_streamer: public socket {
 		public:
-			void connect(size_t port);
+			void connect(unsigned short port);
 	};
+
+	namespace utils {
+		short set_socket_to_non_block(SOCKET target_fd); // TODO
+		short check_closed_connection(SOCKET target_fd);
+	} // namespace utils
 } // namespace orchid
-#endif // ORCHID_SOCKET_H
+#endif // ORCHID_SOCKET
