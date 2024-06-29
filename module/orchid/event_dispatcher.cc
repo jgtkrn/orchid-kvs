@@ -15,13 +15,13 @@ namespace orchid {
 
         bool event_dispatcher::attach_event(EFD event_fd) {
             struct epoll_event ev;
-            ev.events = is_main_efd ? EPOLLIN : EPOLLIN | EPOLLET;
+            ev.events = _is_main_efd ? EPOLLIN : EPOLLIN | EPOLLET;
             ev.data.fd = event_fd;
             int event_ctl = epoll_ctl(get_fd(), EPOLL_CTL_ADD, event_fd, &ev);
             if(-1 == event_ctl) {
                 std::cout << "Failed to attach event with efd: " << event_fd << std::endl;
             }
-            is_main_efd = false;
+            _is_main_efd = false;
             return event_ctl > -1 ? true : false;
         }
         bool event_dispatcher::detach_event(EFD event_fd) {
@@ -69,6 +69,7 @@ namespace orchid {
         }
 
         void event_dispatcher::close() {
-            ::close(get_fd());
+		if(_fd > 0) ::close(_fd);
+		_fd = -1;
         }
 }

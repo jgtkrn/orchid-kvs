@@ -35,10 +35,8 @@ namespace orchid {
 	}
 
 	void socket::close() {
-		if(fd > 0) {
-			::close(fd);
-			fd = -1;
-		}
+		if(_fd > 0) ::close(_fd);
+		_fd = -1;
 	}
 
 	int socket::recv(SOCKET target_fd, std::string& message) {

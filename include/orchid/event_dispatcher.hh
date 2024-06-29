@@ -25,7 +25,7 @@ typedef int EFD;
 namespace orchid {
     class event_dispatcher {
         private:
-            /** 
+            /**
 			 * _fd is a variable to store event dispatcher file descriptor. 
 			 * returns -1 if event dispatcher failed to initialize and greater than
 			 * 0 (commonly above 2 outside std fd).
@@ -38,7 +38,7 @@ namespace orchid {
 			 * and 0 if no issue that require this event dispatcher closed.
 			 */
 			short _runner;
-            
+
             /**
              * _nfds is a variable to store 'n' count of file descriptors registered
              * to current event dispatcher object.
@@ -55,7 +55,7 @@ namespace orchid {
              * _events is a stack of event registered in current
              * event dispatcher, to be managed later by the watcher.
              */
-            struct epoll_event events[MAXEVCONN];
+            struct epoll_event _events[MAXEVCONN];
         public:
             event_dispatcher();
             /**
