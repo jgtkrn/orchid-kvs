@@ -1,7 +1,7 @@
 #include<orchid/socket.hh>
 
 namespace orchid {
-	socket::socket(): fd(-1), runner(0) {}
+	socket::socket(): _fd(-1), _runner(0) {}
 	void socket::init(){
 		SOCKET new_fd = ::socket(AF_INET, SOCK_STREAM, 0);
 		if(!ISVALIDSOCKET(new_fd)) {
@@ -19,19 +19,19 @@ namespace orchid {
 	}
 
 	void socket::set_fd(SOCKET new_fd) {
-		fd = new_fd;
+		_fd = new_fd;
 	}
 
 	SOCKET socket::get_fd() {
-		return fd;
+		return _fd;
 	}
 
 	short socket::get_runner() {
-		return runner;
+		return _runner;
 	}
 
 	void socket::set_runner(short val) {
-		runner = val;
+		_runner = val;
 	}
 
 	void socket::close() {
@@ -70,7 +70,7 @@ namespace orchid {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
-		addr.sin_addr.s_addr = ntohl(0); // define port
+		addr.sin_addr.s_addr = ntohl(0);
 		int bd = ::bind(get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(bd)) {
 			set_runner(-1);
