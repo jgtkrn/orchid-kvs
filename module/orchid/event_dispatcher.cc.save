@@ -40,11 +40,9 @@ namespace orchid {
             if(-1 == nfds) {
                 set_runner(-1);
                 std::cout << "Failed watch events..." << std::endl;
-		if(errno == EBADF) std::cout << "EBADF\n";
-		if(errno == EFAULT) std::cout << "EFAULT\n";
-		if(errno == EINTR) std::cout << "EINTR\n";
-		if(errno == EINVAL) std::cout << "EINVAL\n";
+		
             }
+		std::cout << nfds << std::endl;
             return nfds;
         }
 

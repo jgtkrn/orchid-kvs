@@ -1,10 +1,10 @@
 #include<orchid/event_list.hh>
 namespace orchid {
-    event_list::event_list() : tail(nullptr), size(0) {}
+    event_list::event_list(): tail(nullptr), size(0) {}
     void event_list::attach(EFD fd) {
         event_node* new_node = new event_node(fd);
-        if (!head) {
-            head = new_node;
+        if (!tail) {
+            tail = new_node;
             size++;
             return;
         }

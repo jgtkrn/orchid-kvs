@@ -14,6 +14,7 @@ int main(){
 	evd.attach_event(sock.get_fd());
 	while(true){
 		if(-1 == sock.get_runner()) break;
+		if(-1 == evd.get_runner()) break;
 		if(-1 == evd.watch_event()) break;
 		for(int i = 0; i < evd.get_nfds(); ++i) {
 			if(evd.get_index_efd(i) == sock.get_fd()) {

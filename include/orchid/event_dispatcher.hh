@@ -1,8 +1,9 @@
 #include<iostream>
 #include<sys/epoll.h>
 #include<unistd.h>
+#include<errno.h>
 typedef int EFD;
-#define MAXEVCONN  0xF4240
+#define MAXEVCONN 500000
 #ifndef ORCHID_EVENT_DISPATCHER
 #define ORCHID_EVENT_DISPATCHER
 namespace orchid {
@@ -12,8 +13,8 @@ namespace orchid {
             int nfds;
             short runner;
             bool is_main_efd;
-            struct epoll_event *events;
         public:
+            struct epoll_event events[MAXEVCONN];
             event_dispatcher();
             void init();
             bool attach_event(EFD event_fd);
