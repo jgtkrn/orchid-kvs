@@ -31,7 +31,7 @@ namespace orchid {
 			void set_fd(SOCKET new_fd);
 			short get_runner();
 			void set_runner(short val);
-			int recv(SOCKET target_fd, char *message, unsigned short len);
+			int recv(SOCKET target_fd, std::string& message);
 			int send(SOCKET target_fd, std::string& message);
 			void close();
 	};

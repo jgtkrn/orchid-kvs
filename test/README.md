@@ -4,9 +4,9 @@ requirements:
 -libgtest-dev
 -bash execution access
 
-test only available in linux since google test does not support BSD, and this program only support Linux and BSD. 
-to run this test, some libraries needed, because i don't wan't to include google test library to this repository.
-please install this library:
+Test only available in linux since google test does not support BSD. 
+I don't wan't to include google test library to this repository,
+so to run this test please install this libraries:
 
 `sudo apt install libgtest-dev`
 

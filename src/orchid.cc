@@ -23,8 +23,8 @@ int main(){
 				orchid::utils::set_socket_to_non_block(conn);
 				evd.attach_event(conn);
 			} else {
-				char message[READ_LEN];
-				int recv_len = sock.recv(evd.get_index_efd(i), message, READ_LEN);
+				std::string message;
+				int recv_len = sock.recv(evd.get_index_efd(i), message);
 				if(-1 == recv_len) continue;
 				std::cout << message << std::endl;
 			}

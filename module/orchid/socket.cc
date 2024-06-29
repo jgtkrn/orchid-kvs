@@ -41,11 +41,21 @@ namespace orchid {
 		}
 	}
 
-	// TODO: CONVERT TO STD::STRING
-	int socket::recv(SOCKET target_fd, char *message, unsigned short len) {
-		int buff_len = ::recv(target_fd, message, len, 0);
-    	if(buff_len > 0) message[buff_len] = 0;
-    	return buff_len;
+	int socket::recv(SOCKET target_fd, std::string& message) {
+		char temp_buffer[READ_LEN];
+		int buff_len = 0;
+		bool is_read = true;
+		while(is_read) {
+			int recv_len = ::recv(target_fd, temp_buffer, READ_LEN, 0);
+			if(-1 == recv_len) break;
+			if(0 == recv_len) {
+				is_read = false;
+				break;
+			};
+			buff_len += recv_len;
+			message.append(temp_buffer);
+		}
+    		return buff_len;
 	}
 
 	int socket::send(SOCKET target_fd, std::string& message) {
@@ -72,7 +82,7 @@ namespace orchid {
 			set_runner(-1);
 			std::cout << "Failed listen to socket..." << std::endl;
 		}
-		
+
 		std::stringstream stream_msg;
 		stream_msg << "Server listening to port: " << port;
 		std::cout << stream_msg.str() << std::endl;
