@@ -1,11 +1,14 @@
 #include<gtest/gtest.h>
 #include<orchid/socket.hh>
+#include<orchid/utils.hh>
 
 size_t test_port = 5432;
 
 struct SocketTest: public testing::Test {
 	orchid::socket *sock;
-	void SetUp() { sock = new orchid::socket(); }
+	void SetUp() {
+		sock = new orchid::socket();
+	}
 	void TearDown() {
 		sock->close();
 		delete sock;
@@ -60,8 +63,8 @@ TEST_F(SocketTest, SocketGetRunner) {
 }
 
 TEST_F(SocketTest, SocketRecv) {
-	char message[1024];
-	int len = sock->recv(5, message, 1024);
+	std::string message;
+	int len = sock->recv(5, message);
 	EXPECT_TRUE(len >= -1);
 }
 
@@ -100,8 +103,8 @@ TEST_F(TCPListenerTest, TCPListenerGetRunner) {
 }
 
 TEST_F(TCPListenerTest, TCPListenerRecv) {
-	char message[1024];
-	int len = sock->recv(5, message, 1024);
+	std::string message;
+	int len = sock->recv(5, message);
 	EXPECT_TRUE(len >= -1);
 }
 
@@ -124,6 +127,7 @@ TEST_F(TCPListenerTest, TCPListenerListenFailed) {
 TEST_F(TCPListenerTest, TCPListenerAccept) {
 	sock->init();
 	sock->listen(test_port);
+	orchid::utils::set_socket_to_non_block(sock->get_fd());
 	EXPECT_TRUE(sock->accept() >= -1);
 }
 
@@ -157,8 +161,8 @@ TEST_F(TCPStreamerTest, TCPStreamerGetRunner) {
 }
 
 TEST_F(TCPStreamerTest, TCPStreamerRecv) {
-	char message[1024];
-	int len = sock->recv(5, message, 1024);
+	std::string message;
+	int len = sock->recv(5, message);
 	EXPECT_TRUE(len >= -1);
 }
 
@@ -167,7 +171,7 @@ TEST_F(TCPStreamerTest, TCPStreamerSend) {
 	EXPECT_TRUE(sock->send(5, msg) >= -1);
 }
 
-TEST_F(TCPStreamerTest, TCPListenerConnect) {
+TEST_F(TCPStreamerTest, TCPStreamerConnect) {
 	sock->init();
 	sock->connect(test_port);
 	EXPECT_TRUE(sock->get_runner() >= -1);

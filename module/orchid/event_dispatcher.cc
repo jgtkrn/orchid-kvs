@@ -25,12 +25,9 @@ namespace orchid {
             return event_ctl > -1 ? true : false;
         }
         bool event_dispatcher::detach_event(EFD event_fd) {
-            struct epoll_event ev;
-            ev.events = EPOLLIN;
-            ev.data.fd = event_fd;
-            int event_ctl = epoll_ctl(get_fd(), EPOLL_CTL_ADD, event_fd, &ev);
+            int event_ctl = epoll_ctl(get_fd(), EPOLL_CTL_DEL, event_fd, NULL);
             if(-1 == event_ctl) {
-                std::cout << "Failed to attach event with efd: " << event_fd << std::endl;
+                std::cout << "Failed to detach event with efd: " << event_fd << std::endl;
             }
             return event_ctl > -1 ? true : false;
         }
