@@ -10,7 +10,7 @@ typedef int EFD;
 
 namespace orchid {
 	/**
-	 * event_node struct 
+	 * event_node struct
 	 * is an instance object
 	 * for event_list node.
 	 */
@@ -26,11 +26,11 @@ namespace orchid {
 	 * outside event dispatcher. event_list is actually designed
 	 * to manage gracefull shutdown and closed event,
 	 * but maybe there are some benefit discovered in the future.
-	 * 
+	 *
 	 * event_list class using singly linked list, to manage
 	 * lower memory usage overhead, cause this model only need
 	 * one pointer for each node.
-	 * 
+	 *
 	 * event_list class also optimized for node insertion.
 	 * the model is reversed, so the top is actually a tail,
 	 * or latest node, so we only need O(1) time complexity

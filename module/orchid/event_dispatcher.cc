@@ -1,7 +1,7 @@
 #include<orchid/event_dispatcher.hh>
 
 namespace orchid {
-        event_dispatcher::event_dispatcher(): _fd(-1), _nfds(0), _runner(0), _is_main_efd(true) {}
+        event_dispatcher::event_dispatcher(): _fd(-1), _runner(0), _nfds(0), _is_main_efd(true) {}
         void event_dispatcher::init() {
             EFD event_fd = ::epoll_create1(0);
             if(-1 == event_fd) {

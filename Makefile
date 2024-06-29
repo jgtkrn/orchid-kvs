@@ -16,10 +16,10 @@ module/orchid/socket.o:
 	$(CC) -c module/orchid/socket.cc -o module/orchid/socket.o $(FLAGS)
 
 module/orchid/event_dispatcher.o:
-	$(CC) -c module/orchid/event_dispatcher.cc -o module/orchid/event_dispatcher.o $(FLAGS) -Wno-reorder
+	$(CC) -c module/orchid/event_dispatcher.cc -o module/orchid/event_dispatcher.o $(FLAGS)
 
 module/orchid/event_list.o:
-	$(CC) -c module/orchid/event_list.cc -o module/orchid/event_list.o $(FLAGS) -Wno-reorder
+	$(CC) -c module/orchid/event_list.cc -o module/orchid/event_list.o $(FLAGS)
 
 module/orchid/utils.o:
 	$(CC) -c module/orchid/utils.cc -o module/orchid/utils.o $(FLAGS)

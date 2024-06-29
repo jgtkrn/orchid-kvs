@@ -1,6 +1,6 @@
 #include<orchid/event_list.hh>
 namespace orchid {
-    event_list::event_list(): _tail(nullptr), _size(0) {}
+    event_list::event_list(): _size(0), _tail(nullptr) {}
     void event_list::attach(EFD fd) {
         event_node* new_node = new event_node(fd);
         if (!_tail) {
