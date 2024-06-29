@@ -11,6 +11,7 @@ namespace orchid {
             EFD fd;
             int nfds;
             short runner;
+            bool is_main_efd;
             struct epoll_event *events;
         public:
             event_dispatcher();
@@ -19,9 +20,11 @@ namespace orchid {
             bool detach_event(EFD event_fd);
             int watch_event();
             EFD get_fd();
-		void set_fd(EFD new_fd);
-		short get_runner();
-		void set_runner(short val);
+		    void set_fd(EFD new_fd);
+		    short get_runner();
+		    void set_runner(short val);
+            int get_nfds();
+            EFD get_index_efd(int index);
             void close();
     };
 }

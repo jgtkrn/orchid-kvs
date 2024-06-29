@@ -7,7 +7,6 @@
 #include<unistd.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
-#include<fcntl.h>
 
 typedef int SOCKET;
 
@@ -47,10 +46,5 @@ namespace orchid {
 		public:
 			void connect(unsigned short port);
 	};
-
-	namespace utils {
-		short set_socket_to_non_block(SOCKET target_fd); // TODO
-		short check_closed_connection(SOCKET target_fd);
-	} // namespace utils
 } // namespace orchid
 #endif // ORCHID_SOCKET
