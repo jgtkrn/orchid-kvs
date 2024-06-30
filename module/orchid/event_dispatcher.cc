@@ -9,7 +9,6 @@ namespace orchid {
                 std::cout << "Failed init epoll..." << std::endl;
             } else {
                 set_fd(event_fd);
-                std::cout << "Success init epoll, with efd: " << event_fd << std::endl;
             }
         }
 

@@ -38,23 +38,24 @@ namespace orchid {
 		if(_fd > 0) ::close(_fd);
 		_fd = -1;
 	}
-	/**
-		NOTE: under efficiency
-	*/
+
 	int socket::recv(SOCKET target_fd, std::string& message) {
 		char temp_buffer[READ_LEN];
 		int buff_len = 0;
-		//std::cout << "" << std::endl;
-		//while(true) {
+		while(true) {
 			int recv_len = ::recv(target_fd, temp_buffer, READ_LEN, 0);
-			//if(recv_len == 0) continue;
-			//if(recv_len == -1) break;
-			if(recv_len > 0) {
-			buff_len += recv_len;
-			temp_buffer[recv_len] = 0;
-			message.append(temp_buffer, recv_len);
+			if(recv_len == 0) {
+				break;
 			}
-		//}
+			if(recv_len < 0) {
+				break;
+			}
+			if(recv_len > 0) {
+				buff_len += recv_len;
+				message.append(temp_buffer, recv_len);
+				if(recv_len < READ_LEN) break;
+			}
+		}
     		return buff_len;
 	}
 
@@ -106,7 +107,7 @@ namespace orchid {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(port);
-		addr.sin_addr.s_addr = ntohl(0); // define port
+		addr.sin_addr.s_addr = ntohl(0);
 		int conn = ::connect(get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			set_runner(-1);
@@ -115,7 +116,6 @@ namespace orchid {
 			std::stringstream stream_msg;
 			stream_msg << "Client connected to port: " << port;
 			std::cout << stream_msg.str() << std::endl;
-			std::cout << "conn: " << conn << std::endl;
 		}
 	}
 }

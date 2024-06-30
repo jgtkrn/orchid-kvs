@@ -15,7 +15,7 @@ int main() {
 		std::string input;
 		std::getline(std::cin, input);
 		input = orchid::marshall::marshall_from(input);
-		if(sock.send(sock.get_fd(), input) < 0) std::cout << "Failed send message...\n";
+		if(sock.send(sock.get_fd(), input) < 0) std::cout << "orchid|> Failed send message...\n";
 		std::string msg;
 		int recv_len = sock.recv(sock.get_fd(), msg);
 		if(recv_len <= 0) continue;

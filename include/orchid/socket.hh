@@ -33,7 +33,7 @@ typedef int SOCKET;
  * this is initial limit, this will be extended
  * depend on string variable which storing this value.
  */
-#define READ_LEN 409600
+#define READ_LEN 32
 
 #ifndef ORCHID_SOCKET
 #define ORCHID_SOCKET
@@ -56,8 +56,8 @@ namespace orchid {
 			SOCKET _fd;
 
 			/**
-			 * _runner is an indicator to check whether this socket 
-			 * need to be closed. returns -1 if this socket gain issue, 
+			 * _runner is an indicator to check whether this socket
+			 * need to be closed. returns -1 if this socket gain issue,
 			 * and 0 if no issue that require this socket closed.
 			 */
 			short _runner;
@@ -102,7 +102,7 @@ namespace orchid {
 			 * require string refference as variable to store the values returned.
 			 */
 			int recv(SOCKET target_fd, std::string& message);
-			
+
 			/**
 			 * send()
 			 * returns length of char sent dynamically to target connection.
