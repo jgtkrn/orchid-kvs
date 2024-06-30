@@ -4,7 +4,7 @@ namespace orchid {
     namespace marshall {
 
         bool validate_format(orchid_string& orchid_string) {
-            return orchid_string[0] == '#' && ::isdigit(orchid_string[1]) && orchid_string[2] == '\r' && orchid_string[3] == '\n';
+            return orchid_string[0] == '#' && ::isdigit(orchid_string[1]) && ((orchid_string[1] - '0') == 2 || (orchid_string[1] - '0') == 3) && orchid_string[2] == '\r' && orchid_string[3] == '\n';
         }
 
         std::vector<std::string> tear_string(std::string &str) {
@@ -17,18 +17,18 @@ namespace orchid {
             return tokens;
         }
 
-        orchid_string marshall::marshall_from(std::string& message) {
+        orchid_string marshall_from(std::string& message) {
             std::vector<std::string> tokens = tear_string(message);
             std::ostringstream stream;
             stream << "#" << tokens.size() << "\r\n";
             for (auto &token : tokens) {
                 stream << "$" << token.size() << "\r\n" << token << "\r\n";
             }
-            orchid_string oc_str = stream.str()
+            orchid_string oc_str = stream.str();
             return oc_str;
         }
 
-        struct orchid_entry marshall::unmarshall_from(orchid_string& orchid_string) {
+        orchid_entry unmarshall_from(orchid_string& orchid_string) {
             struct orchid_entry entry;
             int command_length = orchid_string[1] - '0';
             int next_msg = 4;
@@ -45,8 +45,8 @@ namespace orchid {
             }
             if(command_length == 2 || command_length == 3) {
                 entry.command_length = command_length;
-                entry.command = command_shards[0] ? command_shards[0] : "";
-                entry.key = 3 == command_length ? command_shards[0] : "";
+                entry.command = 0 < command_length ? command_shards[0] : "";
+                entry.key = 3 == command_length ? command_shards[1] : "";
                 entry.value = 3 == command_length ? command_shards[2] : command_shards[1];
             } else {
                 entry.command_length = command_length;

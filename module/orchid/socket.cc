@@ -113,6 +113,7 @@ namespace orchid {
 			std::stringstream stream_msg;
 			stream_msg << "Client connected to port: " << port;
 			std::cout << stream_msg.str() << std::endl;
+			std::cout << "conn: " << conn << std::endl;
 		}
 	}
 }

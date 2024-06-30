@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cstdlib>
 #include<string>
 #include<orchid/socket.hh>
 #include<orchid/event_dispatcher.hh>
@@ -9,6 +10,7 @@ int main(){
 	orchid::tcp_listener sock;
 	sock.init();
 	sock.listen(1234);
+	std::cout << "fd: " << sock.get_fd() << std::endl;
 	orchid::utils::set_socket_to_non_block(sock.get_fd());
 	orchid::event_dispatcher evd;
 	evd.init();
@@ -21,20 +23,23 @@ int main(){
 			if(evd.get_index_efd(i) == sock.get_fd()) {
 				SOCKET conn = sock.accept();
 				if(conn < 0) continue;
+				std::cout << "Retrieve connection from fd: " << conn << std::endl;
 				orchid::utils::set_socket_to_non_block(conn);
 				evd.attach_event(conn);
 			} else {
 				std::string message;
 				if(-1 == sock.recv(evd.get_index_efd(i), message)) continue;
 				if(orchid::marshall::validate_format(message)) {
-					struct orchid::orchid_entry entry = orchid::marshall::unmarshall_from(message);
-					if(-1 == sock.send(evd.get_index_efd(i), "OK")) std::cout << "Failed send response to client..." << std::endl;
+					struct orchid::marshall::orchid_entry entry = orchid::marshall::unmarshall_from(message);
+					std::string ok_res = "OK";
+					if(-1 == sock.send(evd.get_index_efd(i), ok_res)) std::cout << "Failed send response to client..." << std::endl;
 					std::cout << "command_length: " << entry.command_length << std::endl;
 					std::cout << "command: " << entry.command << std::endl;
 					std::cout << "key: " << entry.key << std::endl;
 					std::cout << "value: " << entry.value << std::endl;
 				} else {
-					if(-1 == sock.send(evd.get_index_efd(i), "Err: Invalid command format")) std::cout << "Failed send response to client..." << std::endl;
+					std::string err_res = "Err: Invalid command format";
+					if(-1 == sock.send(evd.get_index_efd(i), err_res)) std::cout << "Failed send response to client..." << std::endl;
 				}
 				std::cout << message << std::endl;
 			}
@@ -42,5 +47,5 @@ int main(){
 	}
 	sock.close();
 	evd.close();
-	return 0;
+	std::exit(0);
 }

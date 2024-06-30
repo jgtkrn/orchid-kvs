@@ -1,8 +1,8 @@
 CC=g++
 FLAGS= -std=c++20  -Wall -Wextra -I./include
 TEST_FLAGS = -lgtest -lgtest_main -lpthread
-ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/event_dispatcher.o
-ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o
+ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o
+ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o
 
 all: clean module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/event_list.o module/orchid/utils.o module/orchid/marshall.o src/orchid src/orchid-cli
 
