@@ -36,9 +36,8 @@ namespace orchid {
 	 * one pointer for each node.
 	 *
 	 * event_list class also optimized for node insertion.
-	 * the model is reversed, so the top is actually a tail,
-	 * or latest node, so we only need O(1) time complexity
-	 * for inserting new node.
+	 * data order is using LIFO, so we only need O(1) 
+	 * time complexity for inserting new node.
 	 */
 	class event_list {
 		public:

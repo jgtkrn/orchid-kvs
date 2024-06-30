@@ -4,7 +4,7 @@ TEST_FLAGS = -lgtest -lgtest_main -lpthread
 ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/event_dispatcher.o
 ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o
 
-all: clean module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/event_list.o module/orchid/utils.o src/orchid src/orchid-cli
+all: clean module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/event_list.o module/orchid/utils.o module/orchid/marshall.o src/orchid src/orchid-cli
 
 src/orchid: module/orchid/socket.o
 	$(CC) $(ORCHID_DEPS) -o src/orchid $(FLAGS)
@@ -23,6 +23,9 @@ module/orchid/event_list.o:
 
 module/orchid/utils.o:
 	$(CC) -c module/orchid/utils.cc -o module/orchid/utils.o $(FLAGS)
+
+module/orchid/marshall.o:
+	$(CC) -c module/orchid/marshall.cc -o module/orchid/marshall.o $(FLAGS)
 
 test/main_test:
 	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_event_list_test.cc test/orchid_utils_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/event_list.cc module/orchid/utils.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)

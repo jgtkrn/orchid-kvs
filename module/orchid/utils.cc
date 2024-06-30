@@ -20,4 +20,4 @@ namespace orchid {
 			return buff_len;
 		}
 	} // namespace utils
-}
+} // namespace orchid
