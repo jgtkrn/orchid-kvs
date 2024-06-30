@@ -33,7 +33,7 @@ typedef int SOCKET;
  * this is initial limit, this will be extended
  * depend on string variable which storing this value.
  */
-#define READ_LEN 4096
+#define READ_LEN 409600
 
 #ifndef ORCHID_SOCKET
 #define ORCHID_SOCKET

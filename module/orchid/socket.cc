@@ -38,27 +38,29 @@ namespace orchid {
 		if(_fd > 0) ::close(_fd);
 		_fd = -1;
 	}
-
+	/**
+		NOTE: under efficiency
+	*/
 	int socket::recv(SOCKET target_fd, std::string& message) {
 		char temp_buffer[READ_LEN];
 		int buff_len = 0;
-		bool is_read = true;
-		while(is_read) {
+		//std::cout << "" << std::endl;
+		//while(true) {
 			int recv_len = ::recv(target_fd, temp_buffer, READ_LEN, 0);
-			if(-1 == recv_len) break;
-			if(0 == recv_len) {
-				is_read = false;
-				break;
-			};
+			//if(recv_len == 0) continue;
+			//if(recv_len == -1) break;
+			if(recv_len > 0) {
 			buff_len += recv_len;
-			message.append(temp_buffer);
-		}
+			temp_buffer[recv_len] = 0;
+			message.append(temp_buffer, recv_len);
+			}
+		//}
     		return buff_len;
 	}
 
 	int socket::send(SOCKET target_fd, std::string& message) {
 		char *temp_msg = message.data();
-		int buff_len = ::send(target_fd, temp_msg, message.size() + 1, 0);
+		int buff_len = ::send(target_fd, temp_msg, message.size(), 0);
 		if(buff_len == -1) std::cout << "Failed send data..." << std::endl;
 		if(buff_len == 0) std::cout << "No data was sent..." << std::endl;
 		return buff_len;

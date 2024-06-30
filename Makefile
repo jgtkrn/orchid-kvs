@@ -28,7 +28,7 @@ module/orchid/marshall.o:
 	$(CC) -c module/orchid/marshall.cc -o module/orchid/marshall.o $(FLAGS)
 
 test/main_test:
-	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_event_list_test.cc test/orchid_utils_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/event_list.cc module/orchid/utils.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
+	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_event_list_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/event_list.cc module/orchid/utils.cc module/orchid/marshall.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
 
 test: clean test/main_test
 

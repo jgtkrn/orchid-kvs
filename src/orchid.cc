@@ -10,17 +10,18 @@ int main(){
 	orchid::tcp_listener sock;
 	sock.init();
 	sock.listen(1234);
-	std::cout << "fd: " << sock.get_fd() << std::endl;
 	orchid::utils::set_socket_to_non_block(sock.get_fd());
 	orchid::event_dispatcher evd;
 	evd.init();
 	evd.attach_event(sock.get_fd());
+	EFD event_fd;
 	while(true){
 		if(-1 == sock.get_runner()) break;
 		if(-1 == evd.get_runner()) break;
 		if(-1 == evd.watch_event()) break;
 		for(int i = 0; i < evd.get_nfds(); ++i) {
-			if(evd.get_index_efd(i) == sock.get_fd()) {
+			event_fd = evd.get_index_efd(i);
+			if(event_fd == sock.get_fd()) {
 				SOCKET conn = sock.accept();
 				if(conn < 0) continue;
 				std::cout << "Retrieve connection from fd: " << conn << std::endl;
@@ -28,18 +29,24 @@ int main(){
 				evd.attach_event(conn);
 			} else {
 				std::string message;
-				if(-1 == sock.recv(evd.get_index_efd(i), message)) continue;
+				int recv_len = sock.recv(event_fd, message);
+				std::cout << "recv: " << recv_len << std::endl;
+				if(recv_len <= -1) continue;
+				if(recv_len == 0) {
+					evd.detach_event(event_fd);
+					continue;
+				};
 				if(orchid::marshall::validate_format(message)) {
 					struct orchid::marshall::orchid_entry entry = orchid::marshall::unmarshall_from(message);
 					std::string ok_res = "OK";
-					if(-1 == sock.send(evd.get_index_efd(i), ok_res)) std::cout << "Failed send response to client..." << std::endl;
+					if(sock.send(event_fd, ok_res) > 0) std::cout << "Failed send response to client..." << std::endl;
 					std::cout << "command_length: " << entry.command_length << std::endl;
 					std::cout << "command: " << entry.command << std::endl;
 					std::cout << "key: " << entry.key << std::endl;
 					std::cout << "value: " << entry.value << std::endl;
 				} else {
 					std::string err_res = "Err: Invalid command format";
-					if(-1 == sock.send(evd.get_index_efd(i), err_res)) std::cout << "Failed send response to client..." << std::endl;
+					if(-1 == sock.send(event_fd, err_res)) std::cout << "Failed send response to client..." << std::endl;
 				}
 				std::cout << message << std::endl;
 			}
