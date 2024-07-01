@@ -3,6 +3,9 @@
 #include <string>
 #include <ctype.h>
 
+#ifndef ORCHID_MARSHALL
+#define ORCHID_MARSHALL
+
 namespace orchid {
     namespace marshall {
 
@@ -73,3 +76,4 @@ namespace orchid {
          */
     } // namespace marshall
 } // namespace orchid
+#endif // ORCHID_MARSHALL

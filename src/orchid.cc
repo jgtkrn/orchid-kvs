@@ -5,6 +5,8 @@
 #include<orchid/event_dispatcher.hh>
 #include<orchid/utils.hh>
 #include<orchid/marshall.hh>
+#include<orchid/node/orchid_node.hh>
+#include<ds/hash_map.hh>
 
 int main(){
 	orchid::tcp_listener sock;
@@ -15,6 +17,7 @@ int main(){
 	evd.init();
 	evd.attach_event(sock.get_fd());
 	EFD event_fd;
+	ds::hash_map<orchid::node::orchid_node> hash_map(4);
 	while(true){
 		if(-1 == sock.get_runner()) break;
 		if(-1 == evd.get_runner()) break;
@@ -36,12 +39,23 @@ int main(){
 				};
 				if(orchid::marshall::validate_format(message)) {
 					std::string ok_res = "OK";
-					if(sock.send(event_fd, ok_res) < 0) std::cout << "Failed send response to client..." << std::endl;
 					struct orchid::marshall::orchid_entry entry = orchid::marshall::unmarshall_from(message);
 					std::cout << "command_length: " << entry.command_length << std::endl;
 					std::cout << "command: " << entry.command << std::endl;
 					std::cout << "key: " << entry.key << std::endl;
 					std::cout << "value: " << entry.value << std::endl;
+					if(entry.command == "SET" || entry.command == "set") {
+						hash_map.insert(entry.key, entry.value);
+						if(sock.send(event_fd, ok_res) < 0) std::cout << "Failed send response to client..." << std::endl;
+					}
+					if(entry.command == "GET" || entry.command == "get") {
+						orchid::node::orchid_node* node = hash_map.search(entry.key);
+						std::string val = node == nullptr ? "Not Found" : node->_value;
+						if(sock.send(event_fd, val) < 0) std::cout << "Failed send response to client..." << std::endl;
+					}
+					if(entry.command == "DEL" || entry.command == "del") {
+						if(sock.send(event_fd, ok_res) < 0) std::cout << "Failed send response to client..." << std::endl;
+					}
 				} else {
 					std::string err_res = "Err: Invalid command format";
 					if(-1 == sock.send(event_fd, err_res)) std::cout << "Failed send response to client..." << std::endl;

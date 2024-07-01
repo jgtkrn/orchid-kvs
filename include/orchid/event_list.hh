@@ -47,7 +47,7 @@ namespace orchid {
 			unsigned long _size;
 
 			/**
-			 * tail is the latest node
+			 * _tail is the latest node.
 			 */
 			event_node* _tail;
 			event_list();
@@ -66,5 +66,5 @@ namespace orchid {
 			 */
 			void detach(event_node* node);
 	};
-}
+} // namespace orchid
 #endif // ORCHID_EVENT_LIST
