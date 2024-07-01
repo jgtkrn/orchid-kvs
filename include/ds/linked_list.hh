@@ -13,7 +13,7 @@ namespace ds {
      * to their own type.
      */
     template<typename T>
-    concept HasNextPointer = requires(T t) {
+    concept has_next_pointer = requires(T t) {
         { t._next } -> std::same_as<T*>;
     };
 
@@ -28,7 +28,7 @@ namespace ds {
 	 * data order is using LIFO, so we only need O(1)
 	 * time complexity for inserting new node.
 	 */
-    template<HasNextPointer T>
+    template<has_next_pointer T>
 	class linked_list {
 		public:
 			/**

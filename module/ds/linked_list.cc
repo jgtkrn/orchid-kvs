@@ -1,9 +1,9 @@
 #include<ds/linked_list.hh>
 namespace ds {
-    template<HasNextPointer T>
+    template<has_next_pointer T>
     linked_list<T>::linked_list(): _size(0), _tail(nullptr) {}
 
-    template<HasNextPointer T>		
+    template<has_next_pointer T>
 	void linked_list<T>::attach(T* node) {
         if (!_tail) {
             _tail = node;
@@ -15,7 +15,7 @@ namespace ds {
         _size++;
     }
 
-    template<HasNextPointer T>
+    template<has_next_pointer T>
 	void linked_list<T>::detach(std::string& key) {
         T* _current = _tail;
         T* _previous = nullptr;
@@ -35,7 +35,7 @@ namespace ds {
         }
     }
 
-    template<HasNextPointer T>
+    template<has_next_pointer T>
     T* linked_list<T>::search(std::string& key) {
         T* _current = _tail;
         while (_current) {

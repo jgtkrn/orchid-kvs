@@ -8,15 +8,15 @@ namespace orchid {
 		/**
 		* orchid_node struct
 		* is an instance object
-		* which suitable 
+		* which suitable
 		* for linked_list node,
 		* containing orchid_entry sub data.
 		*/
 		struct orchid_node {
 			std::string _key;
 			std::string _value;
-			orhcid_node* _next;
-			orhcid_node(std::string key, std::string value): _key(key), _value(value), _next(nullptr) {}
+			orchid_node* _next;
+			orchid_node(std::string key, std::string value): _key(key), _value(value), _next(nullptr) {}
 		};
 	}
 }

@@ -7,22 +7,11 @@
 #define DS_HASH_MAP
 namespace ds {
     /**
-     * this template define to rule the type used
-     * for this hash_map class, the struct used
-     * should have _next instance which is pointer
-     * to their own type.
-     */
-    template<typename T>
-    concept HasNextPointer = requires(T t) {
-        { t._next } -> std::same_as<T*>;
-    };
-
-    /**
      * hash_map class
      * just a typical hash map object which using
      * chaining method to handle collisions.
      */
-    template<HasNextPointer T>
+    template<has_next_pointer T>
     class hash_map {
         private:
             /**
@@ -74,7 +63,7 @@ namespace ds {
              * search()
              * search data by it's key.
              */
-            std::string search(std::string& key);
-    }
+            T* search(std::string& key);
+    };
 } // namespace ds
 #endif // DS_HASH_MAP
