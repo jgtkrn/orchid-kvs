@@ -1,22 +1,11 @@
 #include<iostream>
 #include<string>
-#include<concepts>
+#include<ds/ds::entry_node.hh>
 
 #ifndef DS_LINKED_LIST
 #define DS_LINKED_LIST
 
 namespace ds {
-    /**
-     * this template define to rule the type used
-     * for this linked_list class, the struct used
-     * should have _next instance which is pointer
-     * to their own type.
-     */
-    template<typename T>
-    concept has_next_pointer = requires(T t) {
-        { t._next } -> std::same_as<T*>;
-    };
-
 	/**
 	 * linked_list class
 	 * object created to manage data which pushed by clients.
@@ -28,7 +17,6 @@ namespace ds {
 	 * data order is using LIFO, so we only need O(1)
 	 * time complexity for inserting new node.
 	 */
-    template<has_next_pointer T>
 	class linked_list {
 		public:
 			/**
@@ -39,7 +27,7 @@ namespace ds {
 			/**
 			 * tail is the latest node
 			 */
-			T* _tail;
+			ds::entry_node* _tail;
 			linked_list();
 
 			/**
@@ -47,7 +35,7 @@ namespace ds {
 			 * initalize new node from file descriptor specified
 			 * and attach it to linked_list tail.
 			 */
-			void attach(T* node);
+			void attach(ds::entry_node* node);
 
 			/**
 			 * detach()
@@ -60,7 +48,7 @@ namespace ds {
              * search()
              * find any value from a key specificed.
              */
-            T* search(std::string& key);
+            ds::entry_node* search(std::string& key);
 	};
 } // namespace ds
 #endif // DS_LINKED_LIST

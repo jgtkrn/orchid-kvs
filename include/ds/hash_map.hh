@@ -1,7 +1,7 @@
 #include<vector>
 #include<functional>
-#include<concepts>
 #include<ds/linked_list.hh>
+#include<ds/entry_node.hh>
 
 #ifndef DS_HASH_MAP
 #define DS_HASH_MAP
@@ -11,7 +11,6 @@ namespace ds {
      * just a typical hash map object which using
      * chaining method to handle collisions.
      */
-    template<has_next_pointer T>
     class hash_map {
         private:
             /**
@@ -20,7 +19,7 @@ namespace ds {
              * client request data, usually contained
              * key and value.
              */
-            std::vector<ds::linked_list<T>> _table;
+            std::vector<ds::linked_list> _table;
 
             /**
              * _size
@@ -63,7 +62,7 @@ namespace ds {
              * search()
              * search data by it's key.
              */
-            T* search(std::string& key);
+            std::string search(std::string& key);
     };
 } // namespace ds
 #endif // DS_HASH_MAP

@@ -1,13 +1,11 @@
 #include<ds/hash_map.hh>
 namespace ds {
-    template<has_next_pointer T>
-    double hash_map<T>::_load_factor() {
+    double hash_map::_load_factor() {
         return static_cast<double>(_size) / _table.size();
     }
 
-    template<has_next_pointer T>
-    void hash_map<T>::_rehash() {
-        std::vector<ds::linked_list<T>> new_table(_table.size() * 2);
+    void hash_map::_rehash() {
+        std::vector<ds::linked_list> new_table(_table.size() * 2);
         for (auto& list : _table) {
             T* _current = list._tail;
             while (_current) {
@@ -21,11 +19,9 @@ namespace ds {
         _table.swap(new_table);
     }
 
-    template<has_next_pointer T>
-    hash_map<T>::hash_map(unsigned long ht_size): _table(ht_size), _size(0) {}
+    hash_map::hash_map(unsigned long ht_size): _table(ht_size), _size(0) {}
 
-    template<has_next_pointer T>
-    void hash_map<T>::insert(std::string& key, std::string& value) {
+    void hash_map::insert(std::string& key, std::string& value) {
         unsigned long index = _hash(key) % _table.size();
         T* node = new T{key, value, nullptr};
         _table[index].attach(node);
@@ -35,17 +31,15 @@ namespace ds {
         }
     }
 
-    template<has_next_pointer T>
-    void hash_map<T>::remove(std::string& key) {
+    void hash_map::remove(std::string& key) {
         unsigned long index = _hash(key) % _table.size();
         _table[index].detach(key);
         _size--;
     }
 
-    template<has_next_pointer T>
-    T* hash_map<T>::search(std::string& key) {
+    std::string hash_map::search(std::string& key) {
         unsigned long index = _hash(key) % _table.size();
-        T* node = _table[index].search(key);
+        ds::entry_node* node = _table[index].search(key);
         if (node) {
             return &(node->value);
         }

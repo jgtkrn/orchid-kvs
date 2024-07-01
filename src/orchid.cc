@@ -5,7 +5,7 @@
 #include<orchid/event_dispatcher.hh>
 #include<orchid/utils.hh>
 #include<orchid/marshall.hh>
-#include<orchid/node/orchid_node.hh>
+#include<ds/entry_node.hh>
 #include<ds/hash_map.hh>
 
 int main(){
@@ -17,7 +17,7 @@ int main(){
 	evd.init();
 	evd.attach_event(sock.get_fd());
 	EFD event_fd;
-	ds::hash_map<orchid::node::orchid_node> hash_map(4);
+	ds::hash_map hash_map(4);
 	while(true){
 		if(-1 == sock.get_runner()) break;
 		if(-1 == evd.get_runner()) break;
@@ -49,8 +49,8 @@ int main(){
 						if(sock.send(event_fd, ok_res) < 0) std::cout << "Failed send response to client..." << std::endl;
 					}
 					if(entry.command == "GET" || entry.command == "get") {
-						orchid::node::orchid_node* node = hash_map.search(entry.key);
-						std::string val = node == nullptr ? "Not Found" : node->_value;
+						auto node = hash_map.search(entry.key);
+						std::string val = node == nullptr ? "Not Found" : node;
 						if(sock.send(event_fd, val) < 0) std::cout << "Failed send response to client..." << std::endl;
 					}
 					if(entry.command == "DEL" || entry.command == "del") {
