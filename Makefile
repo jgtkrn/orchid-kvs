@@ -2,7 +2,7 @@ CC = g++
 FLAGS = -std=c++20  -Wall -Wextra -I./include
 TEST_FLAGS = -lgtest -lgtest_main -lpthread
 ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o
-ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o
+ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o module/config/generator.o
 
 all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o src/orchid src/orchid-cli
 
@@ -16,10 +16,10 @@ config:
 orchid.conf: module/config/orchid.conf
 	cp -f module/config/orchid.conf orchid.conf
 
-src/orchid: module/orchid/socket.o
+src/orchid:
 	$(CC) $(ORCHID_DEPS) -o src/orchid $(FLAGS)
 
-src/orchid-cli: module/orchid/socket.o
+src/orchid-cli:
 	$(CC) $(ORCHID_CLI_DEPS) -o src/orchid-cli $(FLAGS)
 
 module/orchid/socket.o:
@@ -44,7 +44,7 @@ module/config/generator.o:
 	$(CC) -c module/config/generator.cc -o module/config/generator.o $(FLAGS)
 
 test/main_test:
-	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
+	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc test/config_generator_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc module/config/generator.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
 
 test: clean test/main_test
 

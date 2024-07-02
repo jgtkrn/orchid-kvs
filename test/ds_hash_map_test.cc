@@ -47,7 +47,7 @@ TEST_F(HashMapTest, SearchNotFound) {
 	std::string value = "value";
 	hm->insert(key1, value);
 	std::string key2 = "key2";
-	std::string nf = "Not Found";
+	std::string nf = "";
 	EXPECT_STREQ(hm->search(key2).c_str(), nf.c_str());
 }
 

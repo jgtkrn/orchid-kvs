@@ -1,5 +1,5 @@
 #include<orchid/marshall.hh>
-
+#include<iostream>
 namespace orchid {
     namespace marshall {
 
@@ -7,13 +7,21 @@ namespace orchid {
             return orchid_string[0] == '#' && ::isdigit(orchid_string[1]) && ((orchid_string[1] - '0') == 2 || (orchid_string[1] - '0') == 3) && orchid_string[2] == '\r' && orchid_string[3] == '\n';
         }
 
-        std::vector<std::string> tear_string(std::string &str) {
+        std::vector<std::string> tear_string(std::string& str) {
             std::istringstream stream(str);
             std::vector<std::string> tokens;
             std::string token;
-            while (stream >> token) {
-                tokens.push_back(token);
-            }
+		for (int i = 0; i < 2; ++i) {
+        		if (stream >> token) {
+            		tokens.push_back(token);
+        		}
+    		}
+		std::string remainder;
+    		std::getline(stream, remainder);
+   		if (!remainder.empty() && remainder[0] == ' ') {
+        		remainder.erase(0, 1);
+    		}
+    		if(remainder.size() > 0) tokens.push_back(remainder);
             return tokens;
         }
 
@@ -30,31 +38,31 @@ namespace orchid {
 
         orchid_entry unmarshall_from(orchid_string& orchid_string) {
             struct orchid_entry entry;
-            int command_length = orchid_string[1] - '0';
-            int next_msg = 4;
-            int substr_length;
-            std::vector<std::string> command_shards;
-            for(int i = 0; i < command_length; ++i) {
-                if('$' == orchid_string[next_msg]) {
-                    next_msg++;
-                    substr_length = orchid_string[next_msg] - '0';
-                    next_msg += 3;
-                    command_shards.push_back(orchid_string.substr(next_msg, substr_length));
-                    if(command_length - 1 != i) next_msg += substr_length + 2;
-                }
-            }
-            if(command_length == 2 || command_length == 3) {
-                entry.command_length = command_length;
-                entry.command = 0 < command_length ? command_shards[0] : "";
-                entry.key = command_shards[1];
-                entry.value = 3 == command_length ? command_shards[2] : command_shards[1];
-            } else {
-                entry.command_length = command_length;
-                entry.command = "";
-                entry.key = "";
-                entry.value = "";
-            }
-            return entry;
+	int index = 0;
+    	int command_length;
+    	std::string cl_str;
+    	if(orchid_string[index] == '#') command_length = std::stoi(cl_str + orchid_string[index + 1]);
+    	index += 4;
+    	std::string shards[command_length];
+	    for (int i= 0; i < command_length; i++) {
+	      if(orchid_string[index] == '$') {
+        	  index++;
+          	std::string cmd_str;
+          	while (::isdigit(orchid_string[index])) {
+              		cmd_str += orchid_string[index];
+              		index++;
+          	}
+          	int cmd_length = std::stoi(cmd_str);
+          	index += 2;
+          	std::string command = orchid_string.substr(index, cmd_length);
+          	shards[i] = command;
+          	if(i != command_length - 1) index += cmd_length + 2;
+      		}
+    	}
+    		entry.command = shards[0];
+   		 entry.key = shards[1];
+    		entry.value = command_length == 3 ? shards[2] : "";
+		return entry;
         }
     } // namespace marshall
 } // namespace orchid

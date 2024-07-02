@@ -9,20 +9,21 @@
 #include<config/generator.hh>
 
 void fail_send() {
- std::cout << "Failed send response to client..." << std::endl;	
+ std::cout << "Failed send response to client..." << std::endl;
 }
 
 void handle_stream(orchid::tcp_listener& sock, orchid::event_dispatcher& evd, ds::hash_map& hash_map) {
-	orchid::marshall::orchid_entry entry;
 	std::string ok_res = "OK";
 	std::string nf_res = "Err: Not Found";
 	std::string inv_res = "Err: Invalid Format";
-	std::string message;
-	int recv_len;
 	while(sock.get_runner() != -1) {
 		if(-1 == evd.get_runner()) break;
 		if(-1 == evd.watch_event()) break;
 		for(int i = 0; i < evd.get_nfds(); ++i) {
+			orchid::marshall::orchid_entry entry;
+			std::string message;
+			int recv_len;
+			EFD event_fd;
 			event_fd = evd.get_index_efd(i);
 			if(event_fd == sock.get_fd()) {
 				SOCKET conn = sock.accept();
@@ -49,8 +50,9 @@ void handle_stream(orchid::tcp_listener& sock, orchid::event_dispatcher& evd, ds
 					if(node.size() > 0) {
 						if(sock.send(event_fd, node) < 0) fail_send();
 						continue;
-					} 
+					}
 					if(sock.send(event_fd, nf_res) < 0) fail_send();
+					continue;
 				}
 				if(entry.command == "DEL" || entry.command == "del") {
 					hash_map.remove(entry.key);
@@ -66,8 +68,6 @@ void handle_stream(orchid::tcp_listener& sock, orchid::event_dispatcher& evd, ds
 }
 
 int main(int argc, char* argv[]){
-	EFD event_fd;
-
 	/**
 	 * initiaize configuration
 	 */
@@ -77,7 +77,7 @@ int main(int argc, char* argv[]){
 		std::exit(0);
 	}
 	config::args_config_server(argc, argv, cfg);
-	
+
 	/**
 	 * initialize tcp_listener
 	 */
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]){
 	 */
 	orchid::event_dispatcher evd;
 	evd.init();
-	
+
 	/**
 	 * add tcp_listener socket to event_dispatcher
 	 */

@@ -21,8 +21,7 @@ void handle_stream(orchid::tcp_streamer& sock) {
 	}
 }
 
-int main() {
-	
+int main(int argc, char* argv[]) {
 	/**
 	 * initiaize configuration
 	 */
@@ -32,7 +31,8 @@ int main() {
 		std::exit(0);
 	}
 	config::args_config_client(argc, argv, cfg);
-	
+	std::cout << cfg.client_host  << "||" << cfg.client_port << std::endl;
+
 	/**
 	 * initialize tcp_streamer
 	 */

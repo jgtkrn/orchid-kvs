@@ -77,9 +77,7 @@ namespace config {
                 key = arg.substr(1);
                 value = argv[i+1];
             }
-            if(key == "h" || key == "host") {
-                if(std::stoul(value) > 0) cfg.server_host = value;
-            }
+            if(key == "h" || key == "host") cfg.server_host = value;
             if(key == "p" || key == "port") {
                 if(std::stoul(value) > 0) cfg.server_port = std::stoul(value);
             }
@@ -103,9 +101,7 @@ namespace config {
                 key = arg.substr(1);
                 value = argv[i+1];
             }
-            if(key == "h" || key == "host") {
-                if(std::stoul(value) > 0) cfg.client_host = value;
-            }
+            if(key == "h" || key == "host") cfg.client_host = value;
             if(key == "p" || key == "port") {
                 if(std::stoul(value) > 0) cfg.client_port = std::stoul(value);
             }

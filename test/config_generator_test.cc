@@ -28,15 +28,15 @@ TEST_F(GeneratorTest, SetupConfig) {
 }
 
 TEST_F(GeneratorTest, ManageServerArgs) {
-    int argc = 1;
-    char* argv[] = {"-p", "3456"};
+    int argc = 3;
+    char* argv[] = {" ", "-p", "3456"};
     config::args_config_server(argc,argv,cfg);
     EXPECT_EQ(cfg.server_port, 3456);
 }
 
 TEST_F(GeneratorTest, ManageClientArgs) {
-    int argc = 1;
-    char* argv[] = {"-p", "3456"};
+    int argc = 3;
+    char* argv[] = {" ", "-p", "3456"};
     config::args_config_client(argc,argv,cfg);
     EXPECT_EQ(cfg.client_port, 3456);
 }
