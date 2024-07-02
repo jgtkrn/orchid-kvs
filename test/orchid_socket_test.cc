@@ -2,8 +2,6 @@
 #include<orchid/socket.hh>
 #include<orchid/utils.hh>
 
-size_t test_port = 5432;
-
 struct SocketTest: public testing::Test {
 	orchid::socket *sock;
 	void SetUp() {
@@ -115,18 +113,18 @@ TEST_F(TCPListenerTest, TCPListenerSend) {
 
 TEST_F(TCPListenerTest, TCPListenerListenSuccess) {
 	sock->init();
-	sock->listen(test_port);
+	sock->listen();
 	EXPECT_TRUE(sock->get_runner() == 0);
 }
 
 TEST_F(TCPListenerTest, TCPListenerListenFailed) {
-	sock->listen(test_port);
+	sock->listen();
 	EXPECT_TRUE(sock->get_runner() == -1);
 }
 
 TEST_F(TCPListenerTest, TCPListenerAccept) {
 	sock->init();
-	sock->listen(test_port);
+	sock->listen();
 	orchid::utils::set_socket_to_non_block(sock->get_fd());
 	EXPECT_TRUE(sock->accept() >= -1);
 }
@@ -173,6 +171,6 @@ TEST_F(TCPStreamerTest, TCPStreamerSend) {
 
 TEST_F(TCPStreamerTest, TCPStreamerConnect) {
 	sock->init();
-	sock->connect(test_port);
+	sock->connect();
 	EXPECT_TRUE(sock->get_runner() >= -1);
 }

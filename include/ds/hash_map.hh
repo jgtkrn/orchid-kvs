@@ -3,6 +3,8 @@
 #include<ds/linked_list.hh>
 #include<ds/entry_node.hh>
 
+#define DEFAULT_HMAP_CLUSTER_SIZE 16
+
 #ifndef DS_HASH_MAP
 #define DS_HASH_MAP
 namespace ds {

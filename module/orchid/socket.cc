@@ -1,7 +1,8 @@
 #include<orchid/socket.hh>
 
 namespace orchid {
-	socket::socket(): _fd(-1), _runner(0) {}
+	socket::socket(): _fd(-1), _runner(0), _socket_read_len(SOCKET_READ_LEN) {}
+	socket::socket(config::dictionary& cfg): _fd(-1), _runner(0), _socket_read_len(cfg.socket_read_len) {}
 	void socket::init(){
 		SOCKET new_fd = ::socket(AF_INET, SOCK_STREAM, 0);
 		if(!ISVALIDSOCKET(new_fd)) {
@@ -40,10 +41,10 @@ namespace orchid {
 	}
 
 	int socket::recv(SOCKET target_fd, std::string& message) {
-		char temp_buffer[READ_LEN];
+		char temp_buffer[_socket_read_len];
 		int buff_len = 0;
 		while(true) {
-			int recv_len = ::recv(target_fd, temp_buffer, READ_LEN, 0);
+			int recv_len = ::recv(target_fd, temp_buffer, _socket_read_len, 0);
 			if(recv_len == 0) {
 				break;
 			}
@@ -53,7 +54,7 @@ namespace orchid {
 			if(recv_len > 0) {
 				buff_len += recv_len;
 				message.append(temp_buffer, recv_len);
-				if(recv_len < READ_LEN) break;
+				if(recv_len < _socket_read_len) break;
 			}
 		}
     		return buff_len;
@@ -67,11 +68,15 @@ namespace orchid {
 		return buff_len;
 	}
 
-	void tcp_listener::listen(unsigned short port) {
+	tcp_listener::tcp_listener(): socket(), _server_host(DEFAULT_HOST), _server_port(DEFAULT_PORT) {}
+	
+	tcp_listener::tcp_listener(config::dictionary& cfg): socket(cfg), _server_host(cfg.server_host), _server_port(cfg.server_port) {}
+	
+	void tcp_listener::listen() {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
-		addr.sin_port = ntohs(port);
-		addr.sin_addr.s_addr = ntohl(0);
+		addr.sin_port = ntohs(_server_port);
+		inet_pton(AF_INET, _server_host, &(addr.sin_addr));
 		int bd = ::bind(get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(bd)) {
 			set_runner(-1);
@@ -85,10 +90,14 @@ namespace orchid {
 		}
 
 		std::stringstream stream_msg;
-		stream_msg << "Server listening to port: " << port;
+		stream_msg << "Server listening to port: " << _server_port;
 		std::cout << stream_msg.str() << std::endl;
 	}
 
+	tcp_streamer::tcp_streamer(): socket(), _server_host(DEFAULT_HOST), _server_port(DEFAULT_PORT) {}
+
+	tcp_streamer::tcp_streamer(config::dictionary& cfg): socket(cfg), _client_host(cfg.server_host), _client_port(cfg.server_port) {}
+	
 	SOCKET tcp_listener::accept() {
 		struct sockaddr_in addr;
 		socklen_t addr_len = sizeof(addr);
@@ -103,18 +112,18 @@ namespace orchid {
 		return conn_fd;
 	}
 
-	void tcp_streamer::connect(unsigned short port) {
+	void tcp_streamer::connect() {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
-		addr.sin_port = ntohs(port);
-		addr.sin_addr.s_addr = ntohl(0);
+		addr.sin_port = ntohs(_client_port);
+		inet_pton(AF_INET, _client_host, &(addr.sin_addr));
 		int conn = ::connect(get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			set_runner(-1);
 			std::cout << "Failed connect to server..." << std::endl;
 		} else {
 			std::stringstream stream_msg;
-			stream_msg << "Client connected to port: " << port;
+			stream_msg << "Client connected to port: " << _client_port;
 			std::cout << stream_msg.str() << std::endl;
 		}
 	}

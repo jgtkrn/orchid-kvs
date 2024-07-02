@@ -4,8 +4,11 @@ TEST_FLAGS = -lgtest -lgtest_main -lpthread
 ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/linked_list.o module/ds/hash_map.o
 ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o
 
-all: clean module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o src/orchid src/orchid-cli
+all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o src/orchid src/orchid-cli
 
+config: module/config/orchid.conf
+	cp -f module/config/orchid.conf orchid.conf
+	
 src/orchid: module/orchid/socket.o
 	$(CC) $(ORCHID_DEPS) -o src/orchid $(FLAGS)
 

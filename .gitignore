@@ -33,3 +33,7 @@
 src/orchid
 src/orchid-cli
 test/main_test
+
+# Configuration
+orchid.conf
+!module/config/orchid.conf

@@ -8,7 +8,7 @@
 int main() {
 	orchid::tcp_streamer sock;
 	sock.init();
-	sock.connect(1234);
+	sock.connect();
 	while(true) {
 		if(-1 == sock.get_runner()) break;
 		std::cout << "orchid|> ";

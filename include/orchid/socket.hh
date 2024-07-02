@@ -7,6 +7,7 @@
 #include<unistd.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
+#include<config/dictionary.hh>
 
 /**
  * redefine int as SOCKET for easier reading, since file descriptor is an integer.
@@ -32,8 +33,15 @@ typedef int SOCKET;
  * read limit of char length received or sent.
  * this is initial limit, this will be extended
  * depend on string variable which storing this value.
+ * act as default read length if config not specified.
  */
-#define READ_LEN 32
+#define SOCKET_READ_LEN 32
+
+/**
+ * default host and port if config not specified.
+ */
+#define DEFAULT_HOST "127.0.0.1"
+#define DEFAULT_PORT 8896
 
 #ifndef ORCHID_SOCKET
 #define ORCHID_SOCKET
@@ -61,9 +69,24 @@ namespace orchid {
 			 * and 0 if no issue that require this socket closed.
 			 */
 			short _runner;
-		public:
 
+			/**
+			 * _socket_read_len
+			 * object to set max read length each socket stream.
+			 */
+			unsigned short _socket_read_len;
+
+		public:
+			/**
+			 * default constructor
+			 */
 			socket();
+
+			/**
+			 * constructor if there is a config file
+			 */
+			socket(config::dictionary& cfg);
+
 			/**
 			 * init()
 			 * socket function to initialize socket class
@@ -118,7 +141,23 @@ namespace orchid {
 	};
 
 	class tcp_listener: public socket {
+		private:
+			/**
+			 * _server_host
+			 * object to set host specified.
+			 */
+			std::string _server_host;
+
+			/**
+			 * _server_port
+			 * object to set port specified.
+			 */
+			unsigned short _server_port;
 		public:
+			/**
+			 * constructor if there is a config file
+			 */
+			tcp_listener(config::dictionary& cfg);
 			/**
 			 * listen()
 			 * function to sign the port assigned for listening connection.
@@ -132,7 +171,24 @@ namespace orchid {
 	};
 
 	class tcp_streamer: public socket {
+		private:
+			/**
+			 * _client_host
+			 * object to set host specified.
+			 */
+			std::string _client_host;
+
+			/**
+			 * _client_port
+			 * object to set port specified.
+			 */
+			unsigned short _client_port;
+
 		public:
+			/**
+			 * constructor if there is a config file
+			 */
+			tcp_streamer(config::dictionary& cfg);
 			/**
 			 * connect()
 			 * takes port value to connect to target orchid server.

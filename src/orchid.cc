@@ -5,13 +5,13 @@
 #include<orchid/event_dispatcher.hh>
 #include<orchid/utils.hh>
 #include<orchid/marshall.hh>
-#include<ds/entry_node.hh>
 #include<ds/hash_map.hh>
+#include<config/generator.hh>
 
 int main(){
 	orchid::tcp_listener sock;
 	sock.init();
-	sock.listen(1234);
+	sock.listen();
 	orchid::utils::set_socket_to_non_block(sock.get_fd());
 	orchid::event_dispatcher evd;
 	evd.init();
