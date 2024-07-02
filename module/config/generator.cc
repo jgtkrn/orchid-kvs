@@ -1,7 +1,7 @@
-#include<orc_config/generator.hh>
+#include<config/generator.hh>
 
-namespace orc_config {
-    void setup_config(std::string& key, std::string& value, orc_config::dictionary& cfg) {
+namespace config {
+    void setup_config(std::string& key, std::string& value, config::dictionary& cfg) {
         /**
         * SOCKET CONFIG
         */
@@ -14,7 +14,7 @@ namespace orc_config {
             if(std::stoul(value) > 0) cfg.client_port = std::stoul(value);
         }
         if (key == "socket_read_len") {
-            if(std::stoi(value) > 0) cfg.socket_read_len = std::stoi(value);
+            if(std::stoul(value) > 0) cfg.socket_read_len = std::stoul(value);
         }
 
         /**
@@ -25,8 +25,7 @@ namespace orc_config {
         }
     }
 
-
-    bool generate(std::string& filename, orc_config::dictionary& cfg) {
+    bool generate(std::string& filename, config::dictionary& cfg) {
         std::filesystem::path current_file_path = __FILE__;
         std::filesystem::path file_path = current_file_path.parent_path().parent_path().parent_path() / filename;
         if(!std::filesystem::exists(file_path)) {
@@ -67,7 +66,7 @@ namespace orc_config {
         return true;
     }
 
-    void args_config_server(int argc, char* argv[], orc_config::dictionary& cfg) {
+    void args_config_server(int argc, char* argv[], config::dictionary& cfg) {
         std::string arg, key, value;
         for(short i = 1; i < argc; i+=2) {
             arg = argv[i];
@@ -85,7 +84,7 @@ namespace orc_config {
                 if(std::stoul(value) > 0) cfg.server_port = std::stoul(value);
             }
             if(key == "rl" || key == "read-len") {
-                if(std::stoi(value) > 0) cfg.socket_read_len = std::stoi(value);
+                if(std::stoul(value) > 0) cfg.socket_read_len = std::stoul(value);
             }
             if(key == "cs" || key == "cluster-size") {
                 if(std::stoul(value) > 0) cfg.hm_cluster_size = std::stoul(value);
@@ -93,7 +92,7 @@ namespace orc_config {
         }
     }
 
-    void args_config_client(int argc, char* argv[], orc_config::dictionary& cfg) {
+    void args_config_client(int argc, char* argv[], config::dictionary& cfg) {
         std::string arg, key, value;
         for(short i = 1; i < argc; i+=2) {
             arg = argv[i];
@@ -111,8 +110,8 @@ namespace orc_config {
                 if(std::stoul(value) > 0) cfg.client_port = std::stoul(value);
             }
             if(key == "rl" || key == "read-len") {
-                if(std::stoi(value) > 0) cfg.socket_read_len = std::stoi(value);
+                if(std::stoul(value) > 0) cfg.socket_read_len = std::stoul(value);
             }
-	}
+	    }
     }
 } // namespace config

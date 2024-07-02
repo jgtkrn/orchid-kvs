@@ -1,20 +1,20 @@
 CC = g++
 FLAGS = -std=c++20  -Wall -Wextra -I./include
 TEST_FLAGS = -lgtest -lgtest_main -lpthread
-ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/linked_list.o module/ds/hash_map.o module/orc_config/generator.o
+ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o
 ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o
 
-all: clean orc_config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o module/orc_config/generator.o src/orchid src/orchid-cli
+all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o src/orchid src/orchid-cli
 
-orc_config:
+config:
 	@if [ ! -f "orchid.conf" ]; then \
-		cp module/orc_config/orchid.conf orchid.conf; \
+		cp module/config/orchid.conf orchid.conf; \
 	else \
 		echo "orchid.conf already exists"; \
 	fi
 
-orchid.conf: module/orc_config/orchid.conf
-	cp -f module/orc_config/orchid.conf orchid.conf
+orchid.conf: module/config/orchid.conf
+	cp -f module/config/orchid.conf orchid.conf
 
 src/orchid: module/orchid/socket.o
 	$(CC) $(ORCHID_DEPS) -o src/orchid $(FLAGS)
@@ -40,8 +40,8 @@ module/ds/linked_list.o:
 module/ds/hash_map.o:
 	$(CC) -c module/ds/hash_map.cc -o module/ds/hash_map.o $(FLAGS)
 
-module/orc_config/generator.o:
-	$(CC) -c module/orc_config/generator.cc -o module/orc_config/generator.o $(FLAGS)
+module/config/generator.o:
+	$(CC) -c module/config/generator.cc -o module/config/generator.o $(FLAGS)
 
 test/main_test:
 	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)

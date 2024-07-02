@@ -49,15 +49,18 @@ namespace ds {
         if (node) {
             return node->_value;
         }
-	std::string nf = "Not Found";
+	    std::string nf;
         return nf;
     }
+
 	unsigned long hash_map::size() {
 		return _size;
 	}
+
 	unsigned long hash_map::cluster_size() {
 		return _table.size();
 	}
+    
 	hash_map::~hash_map() {
 		for(ds::linked_list list: _table) {
 			list.close();
