@@ -2,7 +2,7 @@
 
 namespace orchid {
 	socket::socket(): _fd(-1), _runner(0), _socket_read_len(SOCKET_READ_LEN) {}
-	socket::socket(config::dictionary& cfg): _fd(-1), _runner(0), _socket_read_len(cfg.socket_read_len) {}
+	socket::socket(orc_config::dictionary& cfg): _fd(-1), _runner(0), _socket_read_len(cfg.socket_read_len) {}
 	void socket::init(){
 		SOCKET new_fd = ::socket(AF_INET, SOCK_STREAM, 0);
 		if(!ISVALIDSOCKET(new_fd)) {
@@ -69,14 +69,14 @@ namespace orchid {
 	}
 
 	tcp_listener::tcp_listener(): socket(), _server_host(DEFAULT_HOST), _server_port(DEFAULT_PORT) {}
-	
-	tcp_listener::tcp_listener(config::dictionary& cfg): socket(cfg), _server_host(cfg.server_host), _server_port(cfg.server_port) {}
-	
+
+	tcp_listener::tcp_listener(orc_config::dictionary& cfg): socket(cfg), _server_host(cfg.server_host), _server_port(cfg.server_port) {}
+
 	void tcp_listener::listen() {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(_server_port);
-		inet_pton(AF_INET, _server_host, &(addr.sin_addr));
+		inet_pton(AF_INET, _server_host.c_str(), &(addr.sin_addr));
 		int bd = ::bind(get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(bd)) {
 			set_runner(-1);
@@ -94,10 +94,10 @@ namespace orchid {
 		std::cout << stream_msg.str() << std::endl;
 	}
 
-	tcp_streamer::tcp_streamer(): socket(), _server_host(DEFAULT_HOST), _server_port(DEFAULT_PORT) {}
+	tcp_streamer::tcp_streamer(): socket(), _client_host(DEFAULT_HOST), _client_port(DEFAULT_PORT) {}
 
-	tcp_streamer::tcp_streamer(config::dictionary& cfg): socket(cfg), _client_host(cfg.server_host), _client_port(cfg.server_port) {}
-	
+	tcp_streamer::tcp_streamer(orc_config::dictionary& cfg): socket(cfg), _client_host(cfg.server_host), _client_port(cfg.server_port) {}
+
 	SOCKET tcp_listener::accept() {
 		struct sockaddr_in addr;
 		socklen_t addr_len = sizeof(addr);
@@ -116,7 +116,7 @@ namespace orchid {
 		struct sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = ntohs(_client_port);
-		inet_pton(AF_INET, _client_host, &(addr.sin_addr));
+		inet_pton(AF_INET, _client_host.c_str(), &(addr.sin_addr));
 		int conn = ::connect(get_fd(), reinterpret_cast<struct sockaddr*>(&addr), sizeof(addr));
 		if(ISSOCKERR(conn)) {
 			set_runner(-1);

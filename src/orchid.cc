@@ -6,10 +6,14 @@
 #include<orchid/utils.hh>
 #include<orchid/marshall.hh>
 #include<ds/hash_map.hh>
-#include<config/generator.hh>
+#include<orc_config/generator.hh>
 
-int main(){
-	orchid::tcp_listener sock;
+int main(int argc, char* argv[]){
+	orc_config::dictionary cfg;
+	std::string conf_file = "orchid.conf";
+	orc_config::generate(conf_file, cfg);
+	orc_config::args_config_server(argc, argv, cfg);
+	orchid::tcp_listener sock(cfg);
 	sock.init();
 	sock.listen();
 	orchid::utils::set_socket_to_non_block(sock.get_fd());

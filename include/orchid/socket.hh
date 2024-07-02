@@ -7,7 +7,7 @@
 #include<unistd.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
-#include<config/dictionary.hh>
+#include<orc_config/dictionary.hh>
 
 /**
  * redefine int as SOCKET for easier reading, since file descriptor is an integer.
@@ -33,12 +33,12 @@ typedef int SOCKET;
  * read limit of char length received or sent.
  * this is initial limit, this will be extended
  * depend on string variable which storing this value.
- * act as default read length if config not specified.
+ * act as default read length if orc_config not specified.
  */
 #define SOCKET_READ_LEN 32
 
 /**
- * default host and port if config not specified.
+ * default host and port if orc_config not specified.
  */
 #define DEFAULT_HOST "127.0.0.1"
 #define DEFAULT_PORT 8896
@@ -83,9 +83,9 @@ namespace orchid {
 			socket();
 
 			/**
-			 * constructor if there is a config file
+			 * constructor if there is a orc_config file
 			 */
-			socket(config::dictionary& cfg);
+			socket(orc_config::dictionary& cfg);
 
 			/**
 			 * init()
@@ -155,14 +155,18 @@ namespace orchid {
 			unsigned short _server_port;
 		public:
 			/**
-			 * constructor if there is a config file
+			 * default constructor.
 			 */
-			tcp_listener(config::dictionary& cfg);
+			tcp_listener();
+			/**
+			 * constructor if there is a orc_config file
+			 */
+			tcp_listener(orc_config::dictionary& cfg);
 			/**
 			 * listen()
 			 * function to sign the port assigned for listening connection.
 			 */
-			void listen(unsigned short port);
+			void listen();
 			/**
 			 * accept()
 			 * accepting external connection, and returns assigned file descriptor.
@@ -186,14 +190,18 @@ namespace orchid {
 
 		public:
 			/**
-			 * constructor if there is a config file
+			 * default constructor.
 			 */
-			tcp_streamer(config::dictionary& cfg);
+			tcp_streamer();
+			/**
+			 * constructor if there is a orc_config file
+			 */
+			tcp_streamer(orc_config::dictionary& cfg);
 			/**
 			 * connect()
 			 * takes port value to connect to target orchid server.
 			 */
-			void connect(unsigned short port);
+			void connect();
 	};
 } // namespace orchid
 #endif // ORCHID_SOCKET
