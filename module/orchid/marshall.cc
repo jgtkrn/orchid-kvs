@@ -46,7 +46,7 @@ namespace orchid {
             if(command_length == 2 || command_length == 3) {
                 entry.command_length = command_length;
                 entry.command = 0 < command_length ? command_shards[0] : "";
-                entry.key = 3 == command_length ? command_shards[1] : "";
+                entry.key = command_shards[1];
                 entry.value = 3 == command_length ? command_shards[2] : command_shards[1];
             } else {
                 entry.command_length = command_length;

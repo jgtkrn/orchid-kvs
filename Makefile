@@ -1,7 +1,7 @@
-CC=g++
-FLAGS= -std=c++20  -Wall -Wextra -I./include
+CC = g++
+FLAGS = -std=c++20  -Wall -Wextra -I./include
 TEST_FLAGS = -lgtest -lgtest_main -lpthread
-ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/hash_map.o
+ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/linked_list.o module/ds/hash_map.o
 ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o
 
 all: clean module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/event_list.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o src/orchid src/orchid-cli
@@ -31,10 +31,10 @@ module/ds/linked_list.o:
 	$(CC) -c module/ds/linked_list.cc -o module/ds/linked_list.o $(FLAGS)
 
 module/ds/hash_map.o:
-	$(CC) -c module/ds/hash_map.cc module/ds/linked_list.o -o module/ds/hash_map.o $(FLAGS)
+	$(CC) -c module/ds/hash_map.cc -o module/ds/hash_map.o $(FLAGS)
 
 test/main_test:
-	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_event_list_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/event_list.cc module/orchid/utils.cc module/orchid/marshall.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
+	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_event_list_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/event_list.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
 
 test: clean test/main_test
 

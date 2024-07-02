@@ -63,6 +63,17 @@ namespace ds {
              * search data by it's key.
              */
             std::string search(std::string& key);
+		/**
+		 * size()
+		 * return node count in hash map.
+		 */
+		unsigned long size();
+		/**
+		 * cluster_size()
+		 * return cluster count or hash table count in hash_map.
+		 */
+		unsigned long cluster_size();
+		~hash_map();
     };
 } // namespace ds
 #endif // DS_HASH_MAP

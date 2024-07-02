@@ -7,10 +7,10 @@ namespace ds {
     void hash_map::_rehash() {
         std::vector<ds::linked_list> new_table(_table.size() * 2);
         for (auto& list : _table) {
-            T* _current = list._tail;
+            ds::entry_node* _current = list._tail;
             while (_current) {
                 size_t new_index = _hash(_current->_key) % new_table.size();
-                T* next = _current->_next;
+                ds::entry_node* next = _current->_next;
                 _current->_next = nullptr;
                 new_table[new_index].attach(_current);
                 _current = next;
@@ -23,7 +23,12 @@ namespace ds {
 
     void hash_map::insert(std::string& key, std::string& value) {
         unsigned long index = _hash(key) % _table.size();
-        T* node = new T{key, value, nullptr};
+        ds::entry_node* exists_node = _table[index].search(key);
+        if (exists_node) {
+		exists_node->_value = value;
+            return;
+        }
+	ds::entry_node* node = new ds::entry_node(key, value);
         _table[index].attach(node);
         _size++;
         if (_load_factor() > 0.7) {
@@ -33,17 +38,30 @@ namespace ds {
 
     void hash_map::remove(std::string& key) {
         unsigned long index = _hash(key) % _table.size();
-        _table[index].detach(key);
-        _size--;
+        if(_table[index].detach(key)) {
+	        _size--;
+	}
     }
 
     std::string hash_map::search(std::string& key) {
         unsigned long index = _hash(key) % _table.size();
         ds::entry_node* node = _table[index].search(key);
         if (node) {
-            return &(node->value);
+            return node->_value;
         }
-        return nullptr;
+	std::string nf = "Not Found";
+        return nf;
     }
+	unsigned long hash_map::size() {
+		return _size;
+	}
+	unsigned long hash_map::cluster_size() {
+		return _table.size();
+	}
+	hash_map::~hash_map() {
+		for(ds::linked_list list: _table) {
+			list.close();
+		}
+	}
 }
 

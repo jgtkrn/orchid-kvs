@@ -1,6 +1,6 @@
 #include<iostream>
 #include<string>
-#include<ds/ds::entry_node.hh>
+#include<ds/entry_node.hh>
 
 #ifndef DS_LINKED_LIST
 #define DS_LINKED_LIST
@@ -42,13 +42,14 @@ namespace ds {
 			 * remove node by a key speficied from 
 			 * current linked_list and rearrange linked_list.
 			 */
-			void detach(std::string& key);
+			bool detach(std::string& key);
 
             /**
              * search()
              * find any value from a key specificed.
              */
             ds::entry_node* search(std::string& key);
+		void close();
 	};
 } // namespace ds
 #endif // DS_LINKED_LIST

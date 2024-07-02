@@ -50,10 +50,10 @@ int main(){
 					}
 					if(entry.command == "GET" || entry.command == "get") {
 						auto node = hash_map.search(entry.key);
-						std::string val = node == nullptr ? "Not Found" : node;
-						if(sock.send(event_fd, val) < 0) std::cout << "Failed send response to client..." << std::endl;
+						if(sock.send(event_fd, node) < 0) std::cout << "Failed send response to client..." << std::endl;
 					}
 					if(entry.command == "DEL" || entry.command == "del") {
+						hash_map.remove(entry.key);
 						if(sock.send(event_fd, ok_res) < 0) std::cout << "Failed send response to client..." << std::endl;
 					}
 				} else {

@@ -13,7 +13,7 @@ namespace ds {
         _size++;
     }
 
-	void linked_list::detach(std::string& key) {
+	bool linked_list::detach(std::string& key) {
         ds::entry_node* _current = _tail;
         ds::entry_node* _previous = nullptr;
         while (_current) {
@@ -25,11 +25,12 @@ namespace ds {
                 }
                 delete _current;
                 _size--;
-                return;
+                return true;
             }
             _previous = _current;
             _current = _current->_next;
         }
+	return false;
     }
 
     ds::entry_node* linked_list::search(std::string& key) {
@@ -42,4 +43,13 @@ namespace ds {
         }
         return nullptr;
     }
+	void linked_list::close() {
+		ds::entry_node* current = _tail;
+        	while (current != nullptr) {
+            		ds::entry_node* to_delete = current;
+            		current = current->_next;
+            		delete to_delete;
+			_size--;
+        	}
+	}
 }
