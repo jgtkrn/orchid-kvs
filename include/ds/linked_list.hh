@@ -49,7 +49,7 @@ namespace ds {
              * find any value from a key specificed.
              */
             ds::entry_node* search(std::string& key);
-		void close();
+			void close();
 	};
 } // namespace ds
 #endif // DS_LINKED_LIST
