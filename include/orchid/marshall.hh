@@ -39,10 +39,10 @@ namespace orchid {
          * string of value.
          */
         struct orchid_entry {
-            int command_length;
             std::string command;
             std::string key;
             std::string value;
+            int command_length;
         };
 
         /**

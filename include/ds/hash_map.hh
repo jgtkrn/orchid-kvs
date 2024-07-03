@@ -24,6 +24,13 @@ namespace ds {
             std::vector<ds::linked_list> _table;
 
             /**
+             * _hash
+             * operator object that return hash,
+             * which will be used for key indexing.
+             */
+            std::hash<std::string> _hash;
+
+            /**
              * _size
              * as usual, it's just size of this hash_map.
              */
@@ -41,40 +48,33 @@ namespace ds {
              */
             void _rehash();
 
-            /**
-             * _hash
-             * operator object that return hash,
-             * which will be used for key indexing.
-             */
-            std::hash<std::string> _hash;
-
         public:
             hash_map(unsigned long ht_size);
             /**
              * insert()
              * inserting new data to hash_map.
              */
-            void insert(std::string& key, std::string& value);
+            void insert(const std::string& key, const std::string& value);
             /**
              * remove()
              * removing data by it's key.
              */
-            void remove(std::string& key);
+            void remove(const std::string& key);
             /**
              * search()
              * search data by it's key.
              */
-            std::string search(std::string& key);
+            std::string search(const std::string& key);
             /**
             * size()
             * return node count in hash map.
             */
-            unsigned long size();
+            unsigned long size() const;
             /**
             * cluster_size()
             * return cluster count or hash table count in hash_map.
             */
-            unsigned long cluster_size();
+            unsigned long cluster_size() const;
             ~hash_map();
     };
 } // namespace ds

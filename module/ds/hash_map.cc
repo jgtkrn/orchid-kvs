@@ -21,7 +21,7 @@ namespace ds {
 
     hash_map::hash_map(unsigned long ht_size): _table(ht_size), _size(0) {}
 
-    void hash_map::insert(std::string& key, std::string& value) {
+    void hash_map::insert(const std::string& key, const std::string& value) {
         unsigned long index = _hash(key) % _table.size();
         ds::entry_node* exists_node = _table[index].search(key);
         if (exists_node) {
@@ -36,14 +36,14 @@ namespace ds {
         }
     }
 
-    void hash_map::remove(std::string& key) {
+    void hash_map::remove(const std::string& key) {
         unsigned long index = _hash(key) % _table.size();
         if(_table[index].detach(key)) {
 	        _size--;
 	}
     }
 
-    std::string hash_map::search(std::string& key) {
+    std::string hash_map::search(const std::string& key) {
         unsigned long index = _hash(key) % _table.size();
         ds::entry_node* node = _table[index].search(key);
         if (node) {
@@ -53,11 +53,11 @@ namespace ds {
         return nf;
     }
 
-	unsigned long hash_map::size() {
+	unsigned long hash_map::size() const {
 		return _size;
 	}
 
-	unsigned long hash_map::cluster_size() {
+	unsigned long hash_map::cluster_size() const {
 		return _table.size();
 	}
     

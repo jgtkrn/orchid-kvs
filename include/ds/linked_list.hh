@@ -42,13 +42,13 @@ namespace ds {
 			 * remove node by a key speficied from 
 			 * current linked_list and rearrange linked_list.
 			 */
-			bool detach(std::string& key);
+			bool detach(const std::string& key);
 
             /**
              * search()
              * find any value from a key specificed.
              */
-            ds::entry_node* search(std::string& key);
+            ds::entry_node* search(const std::string& key);
 			void close();
 	};
 } // namespace ds

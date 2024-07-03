@@ -56,6 +56,13 @@ typedef int SOCKET;
 namespace orchid {
 	class socket {
 		private:
+		
+			/**
+			 * _socket_read_len
+			 * object to set max read length each socket stream.
+			 */
+			unsigned long _socket_read_len;
+
 			/** 
 			 * _fd is a variable to store socket class file descriptor. 
 			 * returns -1 if socket failed to initialize and greater than
@@ -69,12 +76,6 @@ namespace orchid {
 			 * and 0 if no issue that require this socket closed.
 			 */
 			short _runner;
-
-			/**
-			 * _socket_read_len
-			 * object to set max read length each socket stream.
-			 */
-			unsigned short _socket_read_len;
 
 		public:
 			/**
@@ -131,7 +132,7 @@ namespace orchid {
 			 * returns length of char sent dynamically to target connection.
 			 * require string refference which it's value will be sent.
 			 */
-			int send(SOCKET target_fd, std::string& message);
+			int send(SOCKET target_fd, const std::string& message);
 
 			/**
 			 * close()

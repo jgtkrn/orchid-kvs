@@ -10,15 +10,14 @@
  */
 namespace config {
     struct dictionary {
-        // socket data
-        std::string server_host;
-        unsigned long server_port;
-        std::string client_host;
-        unsigned long client_port;
-        unsigned long socket_read_len;
-
         // hash_map data
         unsigned long hm_cluster_size;
+        // socket data
+        unsigned long socket_read_len;
+        std::string server_host;
+        std::string client_host;
+        unsigned short client_port;
+        unsigned short server_port;
     };
 }
 #endif // CONFIG_DICTIONARY

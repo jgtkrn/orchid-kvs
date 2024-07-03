@@ -1,8 +1,8 @@
 #include<orchid/socket.hh>
 
 namespace orchid {
-	socket::socket(): _fd(-1), _runner(0), _socket_read_len(SOCKET_READ_LEN) {}
-	socket::socket(config::dictionary& cfg): _fd(-1), _runner(0), _socket_read_len(cfg.socket_read_len) {}
+	socket::socket(): _socket_read_len(SOCKET_READ_LEN), _fd(-1), _runner(0) {}
+	socket::socket(config::dictionary& cfg): _socket_read_len(cfg.socket_read_len), _fd(-1), _runner(0) {}
 	void socket::init(){
 		SOCKET new_fd = ::socket(AF_INET, SOCK_STREAM, 0);
 		if(!ISVALIDSOCKET(new_fd)) {
@@ -60,7 +60,7 @@ namespace orchid {
     		return buff_len;
 	}
 
-	int socket::send(SOCKET target_fd, std::string& message) {
+	int socket::send(SOCKET target_fd, const std::string& message) {
 		char *temp_msg = message.data();
 		int buff_len = ::send(target_fd, temp_msg, message.size(), 0);
 		if(buff_len == -1) std::cout << "Failed send data..." << std::endl;
