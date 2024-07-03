@@ -48,23 +48,22 @@ typedef int SOCKET;
 
 /**
  * socket class
- * is socket operation encapsulation to manage any common 
+ * is socket operation encapsulation to manage any common
  * socket operation like listen, accept, connect,
- * send message, and receive message. 
+ * send message, and receive message.
  */
 
 namespace orchid {
 	class socket {
 		private:
-		
 			/**
 			 * _socket_read_len
 			 * object to set max read length each socket stream.
 			 */
 			unsigned long _socket_read_len;
 
-			/** 
-			 * _fd is a variable to store socket class file descriptor. 
+			/**
+			 * _fd is a variable to store socket class file descriptor.
 			 * returns -1 if socket failed to initialize and greater than
 			 * 0 (commonly above 2 outside std fd).
 			 */
@@ -132,7 +131,7 @@ namespace orchid {
 			 * returns length of char sent dynamically to target connection.
 			 * require string refference which it's value will be sent.
 			 */
-			int send(SOCKET target_fd, const std::string& message);
+			int send(SOCKET target_fd, std::string& message);
 
 			/**
 			 * close()

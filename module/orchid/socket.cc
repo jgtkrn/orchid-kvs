@@ -44,7 +44,7 @@ namespace orchid {
 		char temp_buffer[_socket_read_len];
 		int buff_len = 0;
 		while(true) {
-			int recv_len = ::recv(target_fd, temp_buffer, _socket_read_len, 0);
+			long long recv_len = ::recv(target_fd, temp_buffer, _socket_read_len, 0);
 			if(recv_len == 0) {
 				break;
 			}
@@ -60,7 +60,7 @@ namespace orchid {
     		return buff_len;
 	}
 
-	int socket::send(SOCKET target_fd, const std::string& message) {
+	int socket::send(SOCKET target_fd, std::string& message) {
 		char *temp_msg = message.data();
 		int buff_len = ::send(target_fd, temp_msg, message.size(), 0);
 		if(buff_len == -1) std::cout << "Failed send data..." << std::endl;
