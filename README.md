@@ -2,7 +2,7 @@
 
 # Orchid KVS
 
-Orchid KVS (Key-Value Store) is an experimental *key-value* in-memory database. The motivation behind Orchid KVS is to explore architecture and memory management behind data intensive softwares. Orchid KVS is developed under the vision of ![**STTUNK**](https://www.linkedin.com/company/sttunk), a local group of technology enthusiasts dedicated to computing technologies exploration.
+Orchid KVS (Key-Value Store) is an experimental *key-value* in-memory database. The motivation behind Orchid KVS is to explore architecture and memory management behind data intensive softwares. Orchid KVS is developed under the vision of [STTUNK](https://www.linkedin.com/company/sttunk), a local group of technology enthusiasts dedicated to computing technologies exploration.
 
 # Requirements
 
