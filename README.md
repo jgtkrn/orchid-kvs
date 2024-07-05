@@ -9,6 +9,7 @@ Orchid KVS (Key-Value Store) is an experimental *key-value* in-memory database. 
 > - *Linux* x64
 > - *GCC* Compiler with *C++20* or above
 > - *libgtest-dev* library if you want to run unit test
+> - *build-essential*
 > - any text editor
 > - *make* if you dont want to build manually
 
@@ -17,7 +18,10 @@ Orchid KVS (Key-Value Store) is an experimental *key-value* in-memory database. 
 ## Clone This Repository
 
 First clone this repository
-> [clone orchid-kvs](https://github.com/jgtkrn/orchid-kvs.git) && cd orchid-kvs
+> git clone https://github.com/jgtkrn/orchid-kvs.git && cd orchid-kvs
+
+## Install Packages
+> sudo apt install build-essential make libgtest-dev
 
 ## Build Project
 
