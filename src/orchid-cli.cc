@@ -31,12 +31,12 @@ int main(int argc, char* argv[]) {
 		std::exit(0);
 	}
 	config::args_config_client(argc, argv, cfg);
-	std::cout << cfg.client_host  << "||" << cfg.client_port << std::endl;
 
 	/**
 	 * initialize tcp_streamer
 	 */
-	orchid::tcp_streamer sock(cfg);
+	orchid::tcp_streamer sock;
+	sock.load_config(cfg);
 	sock.init();
 	sock.connect();
 

@@ -81,7 +81,8 @@ int main(int argc, char* argv[]){
 	/**
 	 * initialize tcp_listener
 	 */
-	orchid::tcp_listener sock(cfg);
+	orchid::tcp_listener sock;
+	sock.load_config(cfg);
 	sock.init();
 	sock.listen();
 	orchid::utils::set_socket_to_non_block(sock.get_fd());

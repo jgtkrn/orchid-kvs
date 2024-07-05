@@ -7,8 +7,8 @@ ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshal
 all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o src/orchid src/orchid-cli
 
 config:
-	@if [ ! -f "orchid.conf" ]; then \
-		cp module/config/orchid.conf orchid.conf; \
+	@if [ ! -f orchid.conf ]; then \
+		cp -f module/config/orchid.conf orchid.conf; \
 	else \
 		echo "orchid.conf already exists"; \
 	fi

@@ -55,7 +55,7 @@ typedef int SOCKET;
 
 namespace orchid {
 	class socket {
-		private:
+		protected:
 			/**
 			 * _socket_read_len
 			 * object to set max read length each socket stream.
@@ -83,9 +83,9 @@ namespace orchid {
 			socket();
 
 			/**
-			 * constructor if there is a config file
+			 * load configuration struct to current object.
 			 */
-			socket(config::dictionary& cfg);
+			virtual void load_config(config::dictionary& cfg);
 
 			/**
 			 * init()
@@ -158,15 +158,18 @@ namespace orchid {
 			 * default constructor.
 			 */
 			tcp_listener();
+
 			/**
-			 * constructor if there is a config file
+			 * load configuration struct to current object.
 			 */
-			tcp_listener(config::dictionary& cfg);
+			void load_config(config::dictionary& cfg);
+			
 			/**
 			 * listen()
 			 * function to sign the port assigned for listening connection.
 			 */
 			void listen();
+
 			/**
 			 * accept()
 			 * accepting external connection, and returns assigned file descriptor.
@@ -193,10 +196,12 @@ namespace orchid {
 			 * default constructor.
 			 */
 			tcp_streamer();
+
 			/**
-			 * constructor if there is a config file
+			 * load configuration struct to current object.
 			 */
-			tcp_streamer(config::dictionary& cfg);
+			void load_config(config::dictionary& cfg);
+
 			/**
 			 * connect()
 			 * takes port value to connect to target orchid server.
