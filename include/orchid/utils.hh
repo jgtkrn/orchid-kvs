@@ -1,6 +1,6 @@
-#include<iostream>
-#include<sys/socket.h>
-#include<fcntl.h>
+#include <iostream>
+#include <sys/socket.h>
+#include <fcntl.h>
 
 /**
  * redefine int as SOCKET for easier reading, since file descriptor is an integer.

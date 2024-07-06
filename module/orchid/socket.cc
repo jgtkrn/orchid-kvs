@@ -22,7 +22,7 @@ namespace orchid {
 			std::cout << "Failed to set socket options..." << std::endl;
 			return;
 		}
-		set_fd(new_fd);
+		_fd = new_fd;
 	}
 
 	void socket::set_fd(SOCKET new_fd) {

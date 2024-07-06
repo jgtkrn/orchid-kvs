@@ -56,7 +56,7 @@ namespace orchid {
          * tear_string()
          * a function to split string to vector of string.
          */
-        std::vector<std::string> tear_string(std::string &str);
+        std::vector<std::string> tear_string(std::string& str);
 
         /**
          * marshall_to()

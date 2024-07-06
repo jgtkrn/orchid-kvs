@@ -1,17 +1,10 @@
-#include<iostream>
-#include<sys/epoll.h>
-#include<unistd.h>
-#include<errno.h>
-
-/**
- * redefine int as EFD for easier reading, since file descriptor is an integer.
- */
-typedef int EFD;
-
-/**
- * initial limit for epoll event stack, it is depend on every OS limitation.
- */
-#define MAXEVCONN 100000
+#ifdef __linux__
+#include <orchid/jam/epoll.hh>
+using namespace orchid::jam::epoll;
+#else
+#include <orchid/jam/kqueue.hh>
+using namespace orchid::jam::kqueue;
+#endif
 
 #ifndef ORCHID_EVENT_DISPATCHER
 #define ORCHID_EVENT_DISPATCHER
@@ -55,7 +48,11 @@ namespace orchid {
              * _events is a stack of event registered in current
              * event dispatcher, to be managed later by the watcher.
              */
-            struct epoll_event _events[MAXEVCONN];
+            #ifdef __linux__
+            epoll_event _events[MAXEVCONN];
+            #else
+            kevent _events[MAXEVCONN];
+            #endif
         public:
             event_dispatcher();
             /**
@@ -70,18 +67,19 @@ namespace orchid {
              * attach_event()
              * attach incoming event to current event dispatcher.
              */
-            bool attach_event(EFD event_fd);
+            bool attach_event(const EFD& event_fd);
 
             /**
              * detach_event()
              * detach existing event in current event dispatcher.
              */
-            bool detach_event(EFD event_fd);
+            bool detach_event(const EFD& event_fd);
 
             /**
              * watch_event()
              * manage registered events file descriptor
-             * in _events stack, for operation later.
+             * in _t_events stack, for operation later.
+             * returns number of event triggered.
              */
             int watch_event();
 
@@ -95,7 +93,7 @@ namespace orchid {
 			 * set_fd()
 			 * file descriptor setter for current event dispatcher.
 			 */
-			void set_fd(EFD new_fd);
+			void set_fd(const EFD& new_fd);
 
 			/**
 			 * get_runner()
@@ -107,7 +105,7 @@ namespace orchid {
 			 * set_runner()
 			 * setter for _runner value.
 			 */
-			void set_runner(short val);
+			void set_runner(const short& val);
 
             /**
              * get_nfds()
@@ -121,7 +119,7 @@ namespace orchid {
              * returns file descriptors in current 
              * event dispatcher object by index specified.
              */
-            EFD get_index_efd(int index);
+            EFD get_index_efd(const int& index);
 
 			/**
 			 * close()
