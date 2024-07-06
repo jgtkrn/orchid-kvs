@@ -49,9 +49,9 @@ namespace orchid {
              * event dispatcher, to be managed later by the watcher.
              */
             #ifdef __linux__
-            epoll_event _events[MAXEVCONN];
+            struct epoll_event _events[MAXEVCONN];
             #else
-            kevent _events[MAXEVCONN];
+            struct kevent _events[MAXEVCONN];
             #endif
         public:
             event_dispatcher();

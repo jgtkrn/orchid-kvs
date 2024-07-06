@@ -1,10 +1,10 @@
 CC = g++
 FLAGS = -std=c++20  -Wall -Wextra -I./include
 TEST_FLAGS = -lgtest -lgtest_main -lpthread
-ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o
+ORCHID_DEPS = src/orchid.cc module/orchid/socket.o module/orchid/utils.o module/orchid/marshall.o module/orchid/event_dispatcher.o module/orchid/jam/kqueue.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o
 ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshall.o module/orchid/utils.o module/config/generator.o
 
-all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o src/orchid src/orchid-cli
+all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/orchid/jam/kqueue.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o src/orchid src/orchid-cli
 
 config:
 	@if [ ! -f orchid.conf ]; then \
@@ -30,6 +30,12 @@ module/orchid/event_dispatcher.o:
 
 module/orchid/utils.o:
 	$(CC) -c module/orchid/utils.cc -o module/orchid/utils.o $(FLAGS)
+
+module/orchid/jam/epoll.o:
+	$(CC) -c module/orchid/jam/epoll.cc -o module/orchid/jam/epoll.o $(FLAGS)
+
+module/orchid/jam/kqueue.o:
+	$(CC) -c module/orchid/jam/kqueue.cc -o module/orchid/jam/kqueue.o $(FLAGS)
 
 module/orchid/marshall.o:
 	$(CC) -c module/orchid/marshall.cc -o module/orchid/marshall.o $(FLAGS)

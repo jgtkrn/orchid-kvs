@@ -6,7 +6,7 @@
 
 namespace orchid::jam::epoll {
     EFD jam_init();
-    int jam_attach(const EFD& epfd, const const EFD& event_fd);
-    int jam_detach(const EFD& epfd, const const EFD& event_fd);
-    int jam_watch(const EFD& epfd, epoll_event events[]);
+    int jam_attach(const EFD& epfd, const EFD& event_fd);
+    int jam_detach(const EFD& epfd, const EFD& event_fd);
+    int jam_watch(const EFD& epfd, struct epoll_event events[]);
 }

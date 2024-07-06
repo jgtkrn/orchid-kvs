@@ -58,7 +58,11 @@ namespace orchid {
         }
 
         EFD event_dispatcher::get_index_efd(const int& index) {
+		#ifdef __linux__
             return _events[index].data.fd;
+		#else
+		return _events[index].ident;
+		#endif
         }
 
         void event_dispatcher::close() {
