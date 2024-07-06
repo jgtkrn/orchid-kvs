@@ -4,7 +4,7 @@ namespace orchid::jam::epoll {
         EFD efd = ::epoll_create1(0);
         return efd;
     }
-    int jam_attach(const EFD& epfd, const EFD& event_fd) {
+    int jam_attach(const EFD& epfd, const EFD& event_fd, bool _is_main_efd = false) {
         struct epoll_event ev;
         ev.events = _is_main_efd ? EPOLLIN : EPOLLIN | EPOLLET;
         ev.data.fd = event_fd;

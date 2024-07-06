@@ -9,11 +9,11 @@ namespace orchid {
                 std::cout << "Failed init event..." << std::endl;
             } else {
                 _fd = event_fd;
-            }          
+            }
         }
 
         bool event_dispatcher::attach_event(const EFD& event_fd) {
-            int event_ctl = jam_attach(_fd, event_fd);
+            int event_ctl = jam_attach(_fd, event_fd, _is_main_efd);
             if(-1 == event_ctl) {
                 std::cout << "Failed to attach event with efd: " << event_fd << std::endl;
             }
