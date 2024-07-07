@@ -51,6 +51,7 @@ namespace orchid {
             #ifdef __linux__
             struct epoll_event _events[MAXEVCONN];
             #else
+            struct kevent _r_events[MAXEVCONN];
             struct kevent _events[MAXEVCONN];
             #endif
         public:
