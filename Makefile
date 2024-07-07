@@ -6,7 +6,7 @@ ORCHID_CLI_DEPS = src/orchid-cli.cc module/orchid/socket.o module/orchid/marshal
 
 BSD_DEPS = module/orchid/jam/kqueue.o
 
-LINUX_DEPS = module/orhcid/jam/epoll.o
+LINUX_DEPS = module/orchid/jam/epoll.o
 
 all: clean config module/orchid/socket.o module/orchid/event_dispatcher.o module/orchid/utils.o module/orchid/marshall.o module/orchid/jam/epoll.o module/ds/linked_list.o module/ds/hash_map.o module/config/generator.o src/linux/orchid src/linux/orchid-cli move
 
@@ -84,7 +84,7 @@ module/config/generator.o:
 	$(CC) -c module/config/generator.cc -o module/config/generator.o $(FLAGS)
 
 test/main_test:
-	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc test/config_generator_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc module/config/generator.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
+	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc test/config_generator_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/jam/epoll.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc module/config/generator.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
 
 test: clean test/main_test
 
@@ -100,4 +100,4 @@ move:
 	fi
 
 clean:
-	rm -rf **/**/*.o **/*.o *.o src/orchid src/orchid-cli src/linux src/bsd test/*_test
+	rm -rf **/**/**/*.o **/**/*.o **/*.o *.o src/orchid src/orchid-cli src/linux src/bsd test/*_test
