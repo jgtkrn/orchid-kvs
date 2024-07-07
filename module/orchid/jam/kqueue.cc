@@ -10,7 +10,7 @@ namespace orchid::jam::kqueue {
     }
 
     int jam_detach(const EFD& epfd, const EFD& event_fd,struct kevent r_events[]) {
-        EV_SET(r_events, event_fd, EVFILT_EMPTY, EV_DELETE | EV_DISABLE, 0, 0, 0);
+        EV_SET(r_events, event_fd, EVFILT_READ, EV_DELETE | EV_DISABLE, 0, 0, 0);
         return ::kevent(epfd, r_events, 1, NULL, 0, NULL);
     }
     int jam_watch(const EFD& epfd, struct kevent events[]) {
