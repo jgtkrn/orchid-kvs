@@ -13,7 +13,11 @@ namespace orchid {
         }
 
         bool event_dispatcher::attach_event(const EFD& event_fd) {
+            #ifdef __linux__
             int event_ctl = jam_attach(_fd, event_fd, _is_main_efd);
+            #else
+            int event_ctl = jam_attach(_fd, event_fd, _r_events);
+            #endif
             if(-1 == event_ctl) {
                 std::cout << "Failed to attach event with efd: " << event_fd << std::endl;
             }
@@ -21,7 +25,11 @@ namespace orchid {
             return event_ctl > -1 ? true : false;
         }
         bool event_dispatcher::detach_event(const EFD& event_fd) {
+            #ifdef __linux__
             int event_ctl = jam_detach(_fd, event_fd);
+            #else
+            int event_ctl = jam_detach(_fd, event_fd, _r_events);
+            #endif
             if(-1 == event_ctl) {
                 std::cout << "Failed to detach event with efd: " << event_fd << std::endl;
             }
