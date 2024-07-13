@@ -1,4 +1,6 @@
-![orchid-kvs-logo](./doc/images/orchid-kvs-logo-nbg.png)
+<p align="center">
+    <img src="./doc/images/orchid-kvs-logo-nbg.png">
+</p>
 
 # Orchid KVS
 
