@@ -7,6 +7,7 @@
 #include<orchid/marshall.hh>
 #include<ds/hash_map.hh>
 #include<config/generator.hh>
+#include<cron/cron.hh>
 
 void fail_send() {
  std::cout << "Failed send response to client..." << std::endl;
