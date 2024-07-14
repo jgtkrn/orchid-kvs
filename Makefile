@@ -88,7 +88,7 @@ module/cron/cron.o:
 	$(CC) -c module/cron/cron.cc -o module/cron/cron.o $(FLAGS) $(THD)
 
 test/main_test:
-	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc test/config_generator_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/jam/epoll.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc module/config/generator.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
+	$(CC) test/main_test.cc test/orchid_socket_test.cc test/orchid_event_dispatcher_test.cc test/orchid_utils_test.cc test/orchid_marshall_test.cc test/ds_linked_list_test.cc test/ds_hash_map_test.cc test/config_generator_test.cc test/cron_cron_test.cc module/orchid/socket.cc module/orchid/event_dispatcher.cc module/orchid/jam/epoll.cc module/orchid/utils.cc module/orchid/marshall.cc module/ds/linked_list.cc module/ds/hash_map.cc module/config/generator.cc module/cron/cron.cc -o test/main_test $(FLAGS) $(TEST_FLAGS)
 
 test: clean test/main_test
 

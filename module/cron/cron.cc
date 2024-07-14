@@ -2,30 +2,49 @@
 
 namespace cron {
     long long time_mapper(std::string time) {
-        useconds_t minutes = 0;
-        useconds_t seconds = 0;
+        long long mapped_time = 0;
 
-        unsigned long s_t = 1000000;
-        unsigned long m_t = s_t * 60;
+        long long d_t = 86400000000;
+        long long h_t = 3600000000;  
+        long long m_t = 60000000;     
+        long long s_t = 1000000;
+        long long ms_t = 1000;
 
         std::string temp_time_string = "";
-
-        for(unsigned long i = 0; i < time.size(); ++i) {
-            if(::isdigit(time[i])) {
+        for (unsigned long i = 0; i < time.size(); ++i) {
+            if (isdigit(time[i])) {
                 temp_time_string += time[i];
             } else {
-                if(time[i] == 'M' || time[i] == 'm') {
-                    minutes += (std::stoul(temp_time_string) * m_t);
+                if (time[i] == 'D' || time[i] == 'd') {
+                    mapped_time += std::stoull(temp_time_string) * d_t;
                     temp_time_string = "";
-                } else if(time[i] == 'S' || time[i] == 's') {
-                    seconds += (std::stoul(temp_time_string) * s_t);
+                } else if (time[i] == 'H' || time[i] == 'h') {
+                    mapped_time += std::stoull(temp_time_string) * h_t;
                     temp_time_string = "";
+                } else if (time[i] == 'M' || time[i] == 'm') {
+                    if (i + 1 < time.size() && (time[i + 1] == 'S' || time[i + 1] == 's')) {
+                        mapped_time += std::stoull(temp_time_string) * ms_t;
+                        temp_time_string = "";
+                        i++;
+                    } else {
+                        mapped_time += std::stoull(temp_time_string) * m_t;
+                        temp_time_string = "";
+                    }
+                } else if (time[i] == 'S' || time[i] == 's') {
+                    mapped_time += std::stoull(temp_time_string) * s_t;
+                    temp_time_string = "";
+                } else if (time[i] == 'U' || time[i] == 'u') {
+                    if (i + 1 < time.size() && (time[i + 1] == 'S' || time[i + 1] == 's')) {
+                        mapped_time += std::stoull(temp_time_string);
+                        temp_time_string = "";
+                        i++;
+                    }
                 } else {
                     return -1;
                 }
             }
         }
-        return minutes + seconds;
+        return mapped_time;
     }
 
     void schedule(std::string time, std::function<void()> func) {
@@ -36,7 +55,7 @@ namespace cron {
         }
         std::thread t([microseconds, func](){
             while(true) {
-                ::usleep(microseconds);
+                ::sleep(microseconds);
                 func();
             }
         });
